@@ -6,7 +6,7 @@
 **Site:** https://nearhackathon.com/
 **Live dashboard:** https://xzlawliet.github.io/Bound/
 **Repository:** https://github.com/xzLawliet/Bound
-**Active testnet:** owner `xzlawliet.testnet`, guardian `guardian.xzlawliet.testnet`, agent `agent2.xzlawliet.testnet`, vendor `vendor.xzlawliet.testnet`. Limits 0.25 NEAR max / 0.5 NEAR daily. Unknown receiver `near-examples.testnet`. 2026-11-06 run ended unpaused with `spent_today` exactly 0.1 NEAR. Receipts: README live proof. Legacy old guardian receipts stay in `DEV.md` and are not this balance. https://xzlawliet.github.io/Bound/ still calls `guardian.bound-aoyamari.testnet` until a later publish from `main`.
+**Active testnet:** owner `xzlawliet.testnet`, guardian `guardian.xzlawliet.testnet`, agent `agent2.xzlawliet.testnet`, vendor `vendor.xzlawliet.testnet`. Limits 0.25 NEAR max / 0.5 NEAR daily. Unknown receiver `near-examples.testnet`. 2026-11-06 run ended unpaused with `spent_today` exactly 0.1 NEAR. Receipts: README live proof. Legacy old guardian receipts stay in `DEV.md` and are a separate balance. https://xzlawliet.github.io/Bound/ serves `/Bound/assets/index-Bsw1NO-N.js`, which calls `guardian.xzlawliet.testnet`.
 
 ## Positioning one-liner
 
@@ -23,8 +23,9 @@ Transparent on-chain spending policy for AI agents — complementary to OutLayer
 ## FC key proof (required narrative)
 
 - Create agent key with `add_access_key` permission = Function Call only to guardian `spend`.
-- Document that Function Call keys **cannot** `Transfer` NEAR at the protocol level.
-- Treasury NEAR only leaves via guardian `spend` / owner `withdraw`.
+- Function Call keys **cannot** `Transfer` NEAR at the protocol level. That limit applies to the agent key. Owner `xzlawliet.testnet` administers `guardian.xzlawliet.testnet` through the guardian account's full-access key.
+- That full-access key can change or delete the contract code and can move NEAR outside `spend` and `withdraw`. Inside the contract, `spend` pays a whitelisted receiver under the caps, and `withdraw` pays the owner. The authoritative boundary is the storage note in [`docs/DEPLOY.md`](docs/DEPLOY.md).
+- The whitelist names receivers. Any account may call `spend` when those checks pass. The contract does not admit only the agent.
 
 ## Submit checklist
 

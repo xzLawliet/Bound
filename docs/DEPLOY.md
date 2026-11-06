@@ -2,7 +2,7 @@
 
 Active instance: owner `xzlawliet.testnet`, guardian `guardian.xzlawliet.testnet`, agent `agent2.xzlawliet.testnet`, vendor `vendor.xzlawliet.testnet`. Limits 0.25 NEAR max / 0.5 NEAR daily. Unknown receiver `near-examples.testnet`. The 2026-11-06 run ended unpaused with `spent_today` exactly 0.1 NEAR. Full receipt list: README live proof. Deploy [`C4ECGqdcki9YV9ZZUbTdzuFYoyNH48poWXSna4NGTQ9y`](https://explorer.testnet.near.org/transactions/C4ECGqdcki9YV9ZZUbTdzuFYoyNH48poWXSna4NGTQ9y) uses wasm SHA256 `d8a46cdd310339fb0c9654eacdc7879894e0663038a64039e684b1d72d733110` from source `9e58556`. `Cargo.toml` `repository` is `https://github.com/xzLawliet/Bound` and was not compiled into that wasm. `agent.xzlawliet.testnet` is unused (gas allowance 0, no successful payments).
 
-The commands below use `YOUR_NAME.testnet` placeholders. They are the reproduce path, not a second copy of the live receipts. Legacy old guardian receipts for `guardian.bound-aoyamari.testnet` stay later in this file. https://xzlawliet.github.io/Bound/ still calls that legacy guardian until a later publish from `main`. `frontend/src/near.ts` calls `guardian.xzlawliet.testnet`.
+The commands below use `YOUR_NAME.testnet` placeholders. They are the reproduce path, not a second copy of the live receipts. Legacy old guardian receipts for `guardian.bound-aoyamari.testnet` stay later in this file. https://xzlawliet.github.io/Bound/ serves `/Bound/assets/index-Bsw1NO-N.js`, which calls `guardian.xzlawliet.testnet`. `frontend/src/near.ts` calls the same id. Artifact SHA256 `d8a46cdd310339fb0c9654eacdc7879894e0663038a64039e684b1d72d733110` came from contract source commit `9e58556`. Its embedded `link` is `https://github.com/aoyamari/Bound`. That string is repository metadata in the wasm. The active account is `guardian.xzlawliet.testnet`.
 
 ## Build
 
@@ -153,7 +153,7 @@ Legacy agent key scope: `near account list-keys agent.bound-aoyamari.testnet net
 
 ### Frontend
 
-React/Vite/TypeScript, public `get_policy`, `get_spent_today` and `can_spend` via `fetch`; no browser key. Source calls `guardian.xzlawliet.testnet`. The header shows that id in exact case. The published Pages build still calls archive guardian `guardian.bound-aoyamari.testnet`. Owner wallet UI is not wired yet until specifically completed; not represented as live admin. The required Node version is >=22.22.2. For a supplied secret in NEAR account credential JSON, keep the key file outside the repo and pass `AGENT_KEY_FILE`.
+React/Vite/TypeScript, public `get_policy`, `get_spent_today` and `can_spend` via `fetch`; no browser key. Source and the live Pages bundle call `guardian.xzlawliet.testnet`. The header shows that id in exact case. Owner wallet UI is not wired; admin stays on the NEAR CLI. The required Node version is >=22.22.2. For a supplied secret in NEAR account credential JSON, keep the key file outside the repo and pass `AGENT_KEY_FILE`.
 
 ## Dashboard publishing
 
@@ -165,4 +165,4 @@ npm ci
 npm run publish
 ```
 
-`publish` runs tests, builds, then uses a dev-only `gh-pages` package to deploy `dist` to the `gh-pages` branch of https://github.com/xzLawliet/Bound. Pages deploys that branch from `/`. The live site is https://xzlawliet.github.io/Bound/. `frontend/vite.config.ts` has the `/Bound/` base. The published build serves `/Bound/assets/index-Z9pJAv1H.js` and `/Bound/assets/index-BlP7_agH.css` and still calls legacy guardian `guardian.bound-aoyamari.testnet`. This change does not run `npm run publish`. https://xzlawliet.github.io/Bound/ shows `guardian.xzlawliet.testnet` only after a later publish from `main`. Browser RPC is public GET-style contract view through JSON-RPC. Direct contract mutation is CLI-only in MVP; the web app has no wallet or credentials.
+`publish` runs tests, builds, then uses a dev-only `gh-pages` package to deploy `dist` to the `gh-pages` branch of https://github.com/xzLawliet/Bound. Pages deploys that branch from `/`. The live site is https://xzlawliet.github.io/Bound/. `frontend/vite.config.ts` has the `/Bound/` base. The published build serves `/Bound/assets/index-Bsw1NO-N.js` and `/Bound/assets/index-Caz9VB2G.css` and calls `guardian.xzlawliet.testnet`. This documentation change does not run `npm run publish`. Browser RPC is public GET-style contract view through JSON-RPC. Direct contract mutation is CLI-only in MVP; the web app has no wallet or credentials.

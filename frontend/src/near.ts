@@ -1,6 +1,6 @@
 /** Public NEAR testnet view helpers — no keys, no wallet. */
 
-/** Active guardian. Archive id: `guardian.bound-aoyamari.testnet`. Published Pages still calls the archive id. */
+/** Active guardian, including the live Pages bundle. Archive account: `guardian.bound-aoyamari.testnet`. */
 export const CONTRACT_ID = 'guardian.xzlawliet.testnet'
 export const RPC_URL = 'https://rpc.testnet.near.org'
 export const EXPLORER_URL = `https://explorer.testnet.near.org/accounts/${CONTRACT_ID}`
@@ -136,5 +136,10 @@ export function yoctoToNear(yocto: string | number | bigint, digits = 4): string
 }
 
 export function formatNear(yocto: string | number | bigint): string {
-  return `${yoctoToNear(yocto, 4)} Ⓝ`
+  const short = yoctoToNear(yocto, 4)
+  if (short === '0') {
+    const exact = yoctoToNear(yocto, 24)
+    if (exact !== '0') return `${exact} Ⓝ`
+  }
+  return `${short} Ⓝ`
 }

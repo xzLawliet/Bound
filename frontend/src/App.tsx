@@ -347,34 +347,38 @@ export default function App() {
   )
 }
 
+export const ARCHITECTURE_COPY = {
+  intro:
+    'Funds sit in guardian.xzlawliet.testnet. The agent function-call key can call spend and cannot Transfer NEAR. Owner xzlawliet.testnet administers the guardian with its full-access key, which can change or delete the code and move NEAR outside spend and withdraw.',
+  agent:
+    'agent2.xzlawliet.testnet may call spend only. The contract does not read key type. The function-call key limits that agent. The guardian owner keeps the account full-access key.',
+  guardian:
+    'Public caps: max / tx, daily limit, and a receiver whitelist. can_spend is a read-only dry-run. Any account may call spend when those checks pass.',
+  vendor:
+    'spend pays a listed receiver only, inside the caps. The whitelist names receivers. It does not choose which account may call spend.',
+} as const
+
 function Architecture() {
   return (
     <div>
       <p className="idle-hint" style={{ marginTop: 0 }}>
-        Funds sit in the guardian. Agents hold a Function Call key scoped to{' '}
-        <code className="mono">spend</code> only — native transfer is impossible for that key.
+        {ARCHITECTURE_COPY.intro}
       </p>
       <div className="arch" aria-label="Guardian architecture">
         <div className="arch-node">
           <div className="kicker">01 · Agent</div>
           <h3>Scoped FC key</h3>
-          <p>
-            The demo key may call <code className="mono">spend</code> only. A Function Call key
-            cannot Transfer NEAR at the protocol level; this contract does not check key type.
-          </p>
+          <p>{ARCHITECTURE_COPY.agent}</p>
         </div>
         <div className="arch-node accent">
           <div className="kicker">02 · Guardian</div>
           <h3>Bound contract</h3>
-          <p>
-            Public policy: max / tx, daily limit, whitelist. <code className="mono">can_spend</code>{' '}
-            dry-runs before <code className="mono">spend</code>.
-          </p>
+          <p>{ARCHITECTURE_COPY.guardian}</p>
         </div>
         <div className="arch-node">
           <div className="kicker">03 · Vendor</div>
-          <h3>Whitelist only</h3>
-          <p>Treasury leaves only to listed accounts, under limits — or via owner withdraw.</p>
+          <h3>Receiver whitelist</h3>
+          <p>{ARCHITECTURE_COPY.vendor}</p>
         </div>
       </div>
       <svg
