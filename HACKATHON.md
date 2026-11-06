@@ -4,8 +4,8 @@
 **Tracks (pick both if form allows):** `security` + `agents`
 **Deadline:** 14 Nov 2026 · 23:59 UTC
 **Site:** https://nearhackathon.com/
-**Live dashboard:** https://aoyamari.github.io/Bound/
-**Repository:** https://github.com/aoyamari/Bound
+**Public dashboard:** https://xzlawliet.github.io/Bound/ (project Pages path `/Bound/`, after a maintainer enables Pages on the `gh-pages` branch)
+**Repository:** https://github.com/xzLawliet/Bound
 
 ## Positioning one-liner
 
