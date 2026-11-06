@@ -1,6 +1,10 @@
 # Reproduce Bound on NEAR testnet
 
-These are the actual commands used for **guardian.bound-aoyamari.testnet**, with replaceable placeholders. Use **your own account** for all `YOUR_NAME.testnet` mentions. All accounts and funds here are testnet.
+Active source targets: owner `xzlawliet.testnet` (previously `bound-aoyamari.testnet`), guardian `guardian.xzlawliet.testnet` (previously `guardian.bound-aoyamari.testnet`), agent `agent.xzlawliet.testnet` (previously `agent.bound-aoyamari.testnet`), vendor `vendor.xzlawliet.testnet` (previously `vendor.bound-aoyamari.testnet`). Intended init limits remain 0.25 NEAR max per payment and 0.5 NEAR per UTC day. Those limits are not a recorded `get_policy` on the new guardian. The unknown demo receiver stays `near-examples.testnet`.
+
+Account creation and contract deploy are separate. Owner `xzlawliet.testnet` exists; its 10 NEAR faucet is [`HCTPTiMUQhCzHKLKYKspcz7aTgSjwgxspSpq7sDbVEAA`](https://explorer.testnet.near.org/transactions/HCTPTiMUQhCzHKLKYKspcz7aTgSjwgxspSpq7sDbVEAA). That receipt is not a contract deploy. `guardian.xzlawliet.testnet` was created with 5 NEAR; the creation transaction is omitted. No code and no policy are recorded on that account. Agent and vendor setup is in progress and is not recorded here. This file does not submit a transaction.
+
+The command history below is what was used for `guardian.bound-aoyamari.testnet`, with replaceable placeholders. Use **your own account** for all `YOUR_NAME.testnet` mentions. All accounts and funds here are testnet. The published dashboard still calls `guardian.bound-aoyamari.testnet`. `frontend/src/near.ts` now calls `guardian.xzlawliet.testnet` (previously `guardian.bound-aoyamari.testnet`). Until code is deployed, that call has no policy to show.
 
 ## Build
 
@@ -111,7 +115,7 @@ On that first wasm, and still after the upgrade below, a read-only `contract_sou
 {"version":"0.1.0","link":"https://github.com/aoyamari/Bound","standards":[{"standard":"nep330","version":"1.3.0"}],"build_info":null}
 ```
 
-`link` in that JSON is the prior repository URL stored in the wasm. The current public source is https://github.com/xzLawliet/Bound. `Cargo.toml` `repository` is unchanged by this documentation update, so the deployed bytes still name the prior repository. `build_info` is null, so the wasm does not name a git commit. The embedded link matches `Cargo.toml` `repository` from `469b74b` through `31ab724`. Those commits, including the documented deploy commit `05859e9`, have the same `lib.rs`, `Cargo.toml`, `Cargo.lock`, and `rust-toolchain.toml`. Earlier commits embed a different link (prior repository `https://github.com/aoyamari/bound` at `ec52f6a`, `https://github.com/example/onchain-agent-guardian` at `21f5987`) and are not that first wasm.
+`link` in that JSON is the repository URL stored in the wasm on `guardian.bound-aoyamari.testnet`. The public source is https://github.com/xzLawliet/Bound. `Cargo.toml` `repository` is now that URL. This change does not rebuild or redeploy, so those deployed bytes still name `https://github.com/aoyamari/Bound`. `build_info` is null, so the wasm does not name a git commit. The embedded link matches `Cargo.toml` `repository` from `469b74b` through `31ab724`. Those commits, including the documented deploy commit `05859e9`, have the same `lib.rs`, `Cargo.toml`, `Cargo.lock`, and `rust-toolchain.toml`. Earlier commits embed a different link (prior repository `https://github.com/aoyamari/bound` at `ec52f6a`, `https://github.com/example/onchain-agent-guardian` at `21f5987`) and are not that first wasm.
 
 Rust 1.88.0 (`6b00bc3880198600130e1cf62b8f8a93494488cc`, LLVM 20.1.5), command:
 
@@ -126,7 +130,9 @@ This identifies the first deployed source as that identical contract tree, not o
 
 `scripts/contract-provenance.py` prints SHA256, base58, and the embedded NEP-330 JSON for a wasm. Its encoder self-test still uses the first digest above; that pair is not the current code hash. `.github/workflows/contract-provenance.yml` is an optional later build: it sets `NEP330_BUILD_INFO_SOURCE_CODE_SNAPSHOT` to `HEAD` and remaps paths to `/cargo-home` and `/workspace`, then uploads a wasm artifact. This upgrade did not use those variables (`build_info` is null) and this follow-up does not change the contract.
 
-### Second wasm (current)
+### Second wasm on previous guardian `guardian.bound-aoyamari.testnet`
+
+Contract code has not moved to `guardian.xzlawliet.testnet` (previously `guardian.bound-aoyamari.testnet`). No deploy receipt is recorded here. Account creation is separate from this wasm.
 
 Upgrade deploy [`Cb6saE7z...`](https://explorer.testnet.near.org/transactions/Cb6saE7zu8kRQUYTqqhjgmNpzooTTLJsov7FEvy4HCwH) of contract source `9e585567f69163f1e9bbbc4d53e35e9a9901983c`. That commit is the contract-source ancestor of https://github.com/xzLawliet/Bound `main`. Documentation commits after it leave the contract at that source. One `DeployContract` action and no init call. Read-only `view_code` matches base58 `FagUutviDcjAKZY6Crv8Aj7H3T41jkqBFhuH1kCGWf3m`, SHA256 `d8a46cdd310339fb0c9654eacdc7879894e0663038a64039e684b1d72d733110`, 255,688 bytes. No compiler version is claimed here for that file. The same observations were first recorded on the prior repository in [pull request #2](https://github.com/aoyamari/Bound/pull/2).
 
@@ -144,11 +150,11 @@ curl -s https://rpc.testnet.near.org -H 'content-type: application/json' \
   -d '{"jsonrpc":"2.0","id":"bound-meta","method":"query","params":{"request_type":"call_function","finality":"final","account_id":"guardian.bound-aoyamari.testnet","method_name":"contract_source_metadata","args_base64":"e30="}}'
 ```
 
-Agent key scope remains off-chain: `near account list-keys agent.bound-aoyamari.testnet network-config testnet now`.
+Agent key scope remains off-chain for that previous account: `near account list-keys agent.bound-aoyamari.testnet network-config testnet now`. The same checks against `guardian.xzlawliet.testnet` (previously `guardian.bound-aoyamari.testnet`) and `agent.xzlawliet.testnet` (previously `agent.bound-aoyamari.testnet`) were not run. No code or policy is recorded on the new guardian.
 
 ### Frontend
 
-React/Vite/TypeScript, public `get_policy`, `get_spent_today` and `can_spend` via `fetch`; no browser key. Owner wallet UI is not wired yet until specifically completed; not represented as live admin. The required Node version is >=22.22.2. For a supplied secret in NEAR account credential JSON, keep the key file outside the repo and pass `AGENT_KEY_FILE`.
+React/Vite/TypeScript, public `get_policy`, `get_spent_today` and `can_spend` via `fetch`; no browser key. Source calls `guardian.xzlawliet.testnet` (previously `guardian.bound-aoyamari.testnet`). The published Pages build still calls `guardian.bound-aoyamari.testnet`. Owner wallet UI is not wired yet until specifically completed; not represented as live admin. The required Node version is >=22.22.2. For a supplied secret in NEAR account credential JSON, keep the key file outside the repo and pass `AGENT_KEY_FILE`.
 
 ## Dashboard publishing
 
@@ -160,4 +166,4 @@ npm ci
 npm run publish
 ```
 
-`publish` runs tests, builds, then uses a dev-only `gh-pages` package to deploy `dist` to the `gh-pages` branch of https://github.com/xzLawliet/Bound. Pages deploys that branch from `/`. The live site is https://xzlawliet.github.io/Bound/. `frontend/vite.config.ts` has the `/Bound/` base. The published build serves `/Bound/assets/index-Z9pJAv1H.js` and `/Bound/assets/index-BlP7_agH.css`. Browser RPC is public GET-style contract view through JSON-RPC. Direct contract mutation is CLI-only in MVP; the web app has no wallet or credentials.
+`publish` runs tests, builds, then uses a dev-only `gh-pages` package to deploy `dist` to the `gh-pages` branch of https://github.com/xzLawliet/Bound. Pages deploys that branch from `/`. The live site is https://xzlawliet.github.io/Bound/. `frontend/vite.config.ts` has the `/Bound/` base. The published build serves `/Bound/assets/index-Z9pJAv1H.js` and `/Bound/assets/index-BlP7_agH.css` and still calls `guardian.bound-aoyamari.testnet`. This change does not run `npm run publish`. A later publish would be required before Pages calls `guardian.xzlawliet.testnet` (previously `guardian.bound-aoyamari.testnet`). Browser RPC is public GET-style contract view through JSON-RPC. Direct contract mutation is CLI-only in MVP; the web app has no wallet or credentials.

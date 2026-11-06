@@ -2,7 +2,11 @@
 
 `demo-agent.mjs` makes three real NEAR testnet transactions using an agent with a Function Call access key, then attempts one forbidden native NEAR transfer.
 
-Public source is https://github.com/xzLawliet/Bound. The read-only dashboard is live at https://xzlawliet.github.io/Bound/. On 2026-11-06 UTC the guardian daily cap is already 0.5 / 0.5, so a full `npm run demo` stops before a new positive payment. Use `--negative-only` or wait for the next UTC day. See `DEV.md` for the current code hash.
+Public source is https://github.com/xzLawliet/Bound. `scripts/.env.example` now targets guardian `guardian.xzlawliet.testnet` (previously `guardian.bound-aoyamari.testnet`), agent `agent.xzlawliet.testnet` (previously `agent.bound-aoyamari.testnet`), and vendor `vendor.xzlawliet.testnet` (previously `vendor.bound-aoyamari.testnet`). Owner for that namespace is `xzlawliet.testnet` (previously `bound-aoyamari.testnet`). `SCAM_ACCOUNT_ID` stays `near-examples.testnet`. Amounts are unchanged: 0.1 NEAR allowed attempt, 0.3 NEAR over the intended 0.25 max.
+
+Account creation and contract deploy are separate. Owner `xzlawliet.testnet` exists (10 NEAR faucet `HCTPTiMUQhCzHKLKYKspcz7aTgSjwgxspSpq7sDbVEAA`, not a contract deploy). `guardian.xzlawliet.testnet` exists with 5 NEAR and has no recorded code or policy. Agent and vendor are not recorded yet. This repository change does not send transactions. Dashboard source calls `guardian.xzlawliet.testnet` (previously `guardian.bound-aoyamari.testnet`). The published site https://xzlawliet.github.io/Bound/ still calls `guardian.bound-aoyamari.testnet`.
+
+On 2026-11-06 UTC the previous guardian `guardian.bound-aoyamari.testnet` was already at 0.5 / 0.5. That observation is not a result for `guardian.xzlawliet.testnet`. A full `npm run demo` against the previous account stops before a new positive payment. See `DEV.md` for that previous account's code hash. This file is not a migration receipt.
 
 ## Run (repeat with a funded agent, within the daily allowance)
 

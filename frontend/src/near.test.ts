@@ -1,5 +1,14 @@
 import { describe, it, expect } from 'vitest'
-import { nearToYocto, yoctoToNear, formatNear } from './near'
+import { CONTRACT_ID, EXPLORER_URL, nearToYocto, yoctoToNear, formatNear } from './near'
+
+describe('active account target', () => {
+  it('names the xzlawliet guardian exactly', () => {
+    expect(CONTRACT_ID).toBe('guardian.xzlawliet.testnet')
+    expect(EXPLORER_URL).toBe(
+      'https://explorer.testnet.near.org/accounts/guardian.xzlawliet.testnet',
+    )
+  })
+})
 
 describe('yocto helpers', () => {
   it('converts NEAR to yocto', () => {

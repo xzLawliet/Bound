@@ -102,9 +102,33 @@ cargo build --release --target wasm32-unknown-unknown
 ---
 
 
-## Verified testnet proof
+## Active testnet target
 
-Guardian: [`guardian.bound-aoyamari.testnet`](https://explorer.testnet.near.org/accounts/guardian.bound-aoyamari.testnet). Initially funded with 5 testnet NEAR; max **0.25 NEAR/payment**, **0.5 NEAR/day**; whitelisted vendor `vendor.bound-aoyamari.testnet`.
+Source targets this namespace. This repository change does not submit transactions. Account creation and contract deploy are separate. No contract code and no policy are recorded on `guardian.xzlawliet.testnet`.
+
+| Role | Active id | Previously active | Recorded so far |
+|---|---|---|---|
+| Owner | `xzlawliet.testnet` | `bound-aoyamari.testnet` | Account exists. Faucet of 10 NEAR: [`HCTPTiMUQhCzHKLKYKspcz7aTgSjwgxspSpq7sDbVEAA`](https://explorer.testnet.near.org/transactions/HCTPTiMUQhCzHKLKYKspcz7aTgSjwgxspSpq7sDbVEAA). Account creation only, not a contract deploy. |
+| Guardian | [`guardian.xzlawliet.testnet`](https://explorer.testnet.near.org/accounts/guardian.xzlawliet.testnet) | `guardian.bound-aoyamari.testnet` | Account created with 5 NEAR. Creation transaction omitted. No code and no policy are recorded. |
+| Agent | `agent.xzlawliet.testnet` | `agent.bound-aoyamari.testnet` | Not recorded. Setup is in progress. |
+| Vendor whitelist | `vendor.xzlawliet.testnet` | `vendor.bound-aoyamari.testnet` | Not recorded. Setup is in progress. |
+
+Intended init limits remain max **0.25 NEAR/payment** and **0.5 NEAR/day**. Those numbers are not a `get_policy` result on the new guardian. The unknown receiver stays `near-examples.testnet`.
+
+`frontend/src/near.ts` calls `guardian.xzlawliet.testnet` (previously `guardian.bound-aoyamari.testnet`). Until code is deployed, that call has no policy to show. The published dashboard https://xzlawliet.github.io/Bound/ still calls `guardian.bound-aoyamari.testnet`. This change does not publish Pages.
+
+### Policy read after deploy
+
+```bash
+near contract call-function as-read-only guardian.xzlawliet.testnet get_policy json-args '{}' network-config testnet now
+near account list-keys agent.xzlawliet.testnet network-config testnet now
+```
+
+These commands were not run for this change. They are not evidence of code or policy. No contract is recorded on `guardian.xzlawliet.testnet` (previously `guardian.bound-aoyamari.testnet`).
+
+## Historical testnet proof
+
+Previous guardian: `guardian.bound-aoyamari.testnet`. It was initially funded with 5 testnet NEAR; max **0.25 NEAR/payment**, **0.5 NEAR/day**; whitelisted vendor `vendor.bound-aoyamari.testnet`. The receipts below belong to that account. They are not receipts for `guardian.xzlawliet.testnet` (previously `guardian.bound-aoyamari.testnet`).
 
 The agent's only key is allowed to call `spend`; the bootstrap full-access key was removed. All facts and setup details: [`DEV.md`](DEV.md).
 
@@ -114,16 +138,9 @@ The agent's only key is allowed to call `spend`; the bootstrap full-access key w
 | 0.3 NEAR exceeds cap | `SpendRejected: over_max_per_tx` | [Open](https://explorer.testnet.near.org/transactions/B8p9RA7zqgARfrJ6g1k1mrPP1Mx63urtPfJ3po6V1Z4x) |
 | Unwhitelisted receiver | `SpendRejected: not_whitelisted` | [Open](https://explorer.testnet.near.org/transactions/CbaJYocRDNseff9iAtpchbtD8o6pcy6WvHQxssL3Mbn9) |
 
-Those receipts, and the later allowed payment that filled the UTC day to 0.5 NEAR, are the first bytecode. The account was then upgraded in place (`without-init-call`) from contract source `9e585567f69163f1e9bbbc4d53e35e9a9901983c`, an ancestor of current `main`. Current code hash and the preserved policy are in [`DEV.md`](DEV.md). No new positive payment has been made on the upgraded wasm: the 2026-11-06 daily cap is already 0.5 / 0.5. The negative direct-transfer test is rejected as `RequiresFullAccess` (SDK v7: `AccessKeyRequiresFullAccessActionError`).
+Those receipts, and the later allowed payment that filled the UTC day to 0.5 NEAR, are the first bytecode on `guardian.bound-aoyamari.testnet`. The account was then upgraded in place (`without-init-call`) from contract source `9e585567f69163f1e9bbbc4d53e35e9a9901983c`, an ancestor of current `main`. That code hash and the preserved policy are in [`DEV.md`](DEV.md). No new positive payment has been made on the upgraded wasm: the 2026-11-06 daily cap on that previous guardian is already 0.5 / 0.5. That daily total is not a result for `guardian.xzlawliet.testnet` (previously `guardian.bound-aoyamari.testnet`); migration receipts are still pending. The negative direct-transfer test is rejected as `RequiresFullAccess` (SDK v7: `AccessKeyRequiresFullAccessActionError`).
 
-### Live policy read
-
-```bash
-near contract call-function as-read-only guardian.bound-aoyamari.testnet get_policy json-args '{}' network-config testnet now
-near account list-keys agent.bound-aoyamari.testnet network-config testnet now
-```
-
-Install with `npm install -g near-cli-rs@latest`; contract needs Rust 1.88+. Run `cargo test --manifest-path contracts/agent-guardian/Cargo.toml` and follow `DEV.md` for live parameters. `docs/DEPLOY.md` separates the first wasm (path-sensitive rebuild of `469b74b`–`31ab724`) from the current upgrade hash. Dashboard source lives in `frontend/` and is published from the `gh-pages` branch of https://github.com/xzLawliet/Bound. The live dashboard is https://xzlawliet.github.io/Bound/. The read-only dashboard fetches `get_policy` and `can_spend`; scenario cards are dry-run views, **not payments**. Owner controls are implemented through NEAR CLI only; no browser wallet or production deploy yet.
+Install with `npm install -g near-cli-rs@latest`; contract needs Rust 1.88+. Run `cargo test --manifest-path contracts/agent-guardian/Cargo.toml` and follow `DEV.md` for parameters. `docs/DEPLOY.md` separates the first wasm (path-sensitive rebuild of `469b74b`–`31ab724`) from the previous guardian's upgrade hash. Dashboard source lives in `frontend/` and is published from the `gh-pages` branch of https://github.com/xzLawliet/Bound. The live dashboard is https://xzlawliet.github.io/Bound/. Source scenario receivers are `vendor.xzlawliet.testnet` (previously `vendor.bound-aoyamari.testnet`) and `near-examples.testnet`. The published Pages bundle still calls `guardian.bound-aoyamari.testnet`. The read-only dashboard fetches `get_policy` and `can_spend`; scenario cards are dry-run views, **not payments**. Owner controls are implemented through NEAR CLI only; no browser wallet or production deploy yet.
 
 ## Do X → see Y (AI screener / judges)
 

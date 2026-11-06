@@ -2,7 +2,28 @@
 
 **Test only:** all accounts below are on NEAR **testnet**. Never use its private keys on mainnet.
 
-## Live deployment
+## Active account target
+
+Source ids below. This repository change does not submit transactions. Account creation and contract deploy are separate. No contract code and no policy are recorded on `guardian.xzlawliet.testnet`.
+
+| Role | Active id | Previously active | Recorded so far |
+|---|---|---|---|
+| Owner | `xzlawliet.testnet` | `bound-aoyamari.testnet` | Account exists. Faucet of 10 NEAR: [`HCTPTiMUQhCzHKLKYKspcz7aTgSjwgxspSpq7sDbVEAA`](https://explorer.testnet.near.org/transactions/HCTPTiMUQhCzHKLKYKspcz7aTgSjwgxspSpq7sDbVEAA). This is account creation, not a contract deploy. |
+| Guardian | `guardian.xzlawliet.testnet` | `guardian.bound-aoyamari.testnet` | Account created with 5 NEAR. The creation transaction is omitted. No code and no policy are recorded. |
+| Agent | `agent.xzlawliet.testnet` | `agent.bound-aoyamari.testnet` | Not recorded. Setup is in progress. |
+| Whitelist | `vendor.xzlawliet.testnet` | `vendor.bound-aoyamari.testnet` | Not recorded. Setup is in progress. |
+
+Intended init limits remain 0.25 NEAR max per payment and 0.5 NEAR per UTC day. Those numbers are not a `get_policy` result on `guardian.xzlawliet.testnet`. The unknown demo receiver stays `near-examples.testnet`.
+
+`frontend/src/near.ts` calls `guardian.xzlawliet.testnet` (previously `guardian.bound-aoyamari.testnet`). Until code is deployed, that call has no policy to show. The published dashboard at https://xzlawliet.github.io/Bound/ still calls `guardian.bound-aoyamari.testnet`. This change does not publish Pages.
+
+Public source: https://github.com/xzLawliet/Bound. `contracts/agent-guardian/Cargo.toml` `repository` is that URL. No wasm was rebuilt, so bytes already on `guardian.bound-aoyamari.testnet` are untouched.
+
+All guardian private credentials stay outside tracked files, locally; full-access owner credentials are outside the repo, while the restricted agent credential is under ignored `scripts/credentials/`. `.gitignore` excludes credentials and local env files. None of those files or raw private keys belongs in the public repo, browser, or demo.
+
+## Historical deployment (`bound-aoyamari.testnet`)
+
+These are recorded facts for the previous accounts. They are not receipts for `xzlawliet.testnet` (previously `bound-aoyamari.testnet`) or its subaccounts. Migration of this deployment was not done here.
 
 - Owner `bound-aoyamari.testnet`
 - Guardian `guardian.bound-aoyamari.testnet`
@@ -10,18 +31,18 @@
 - Whitelist `vendor.bound-aoyamari.testnet`
 - Config: 0.25 NEAR max payment / 0.5 NEAR per UTC day
 - Testnet treasury ~5 NEAR; first deploy [transaction](https://explorer.testnet.near.org/transactions/GdqpWg8PvXefyA3Y4ShMo2d73fxFp5CaqovCs6MBWrmg). That transaction id is not a git commit. See `docs/DEPLOY.md` for the first wasm's source range.
-- Public source: https://github.com/xzLawliet/Bound. Deployed contract source is ancestor `9e585567f69163f1e9bbbc4d53e35e9a9901983c`. Commits after that ancestor on `main` are documentation.
+- Public source: https://github.com/xzLawliet/Bound. Deployed contract source is ancestor `9e585567f69163f1e9bbbc4d53e35e9a9901983c`. Commits after that ancestor on `main` did not replace that deployed wasm.
 - Add whitelist [transaction](https://explorer.testnet.near.org/transactions/4DfDaNBXAKtPHuzATaMnC6b3r6E2G1QWZSBB8FvgrtZh)
 - Added Function Call key [transaction](https://explorer.testnet.near.org/transactions/EodNEt68piFniETwQLxMKRaJDNK5bR5o6DDtreXEY639)
 - Deleted full-access bootstrap key [transaction](https://explorer.testnet.near.org/transactions/aWtyzmteNMx9Ss3y5f5gF1kC5CzMfQC2uqWeqDZQd7f)
 
-All guardian private credentials stay outside tracked files, locally; full-access owner credentials are outside the repo, while the restricted agent credential is under ignored `scripts/credentials/`. `.gitignore` excludes credentials and local env files. None of those files or raw private keys belongs in the public repo, browser, or demo.
-
 ## Code upgrade (testnet, state kept)
+
+Recorded on previous guardian `guardian.bound-aoyamari.testnet`. This is not a result for `guardian.xzlawliet.testnet` (previously `guardian.bound-aoyamari.testnet`). Moving the active instance is pending and was not done here.
 
 Second deploy of contract source `9e585567f69163f1e9bbbc4d53e35e9a9901983c` (ancestor of current `main`), [`Cb6saE7z...`](https://explorer.testnet.near.org/transactions/Cb6saE7zu8kRQUYTqqhjgmNpzooTTLJsov7FEvy4HCwH). Read-only tx status: signer and receiver `guardian.bound-aoyamari.testnet`, one `DeployContract` action, `SuccessValue` (`without-init-call`). This note does not name a compiler for that wasm. These observations were first written on the prior repository in [pull request #2](https://github.com/aoyamari/Bound/pull/2) and are carried forward here. This follow-up sends no new transaction.
 
-Read-only `view_code` (2026-11-06): base58 `FagUutviDcjAKZY6Crv8Aj7H3T41jkqBFhuH1kCGWf3m`, SHA256 `d8a46cdd310339fb0c9654eacdc7879894e0663038a64039e684b1d72d733110`, 255,688 bytes. `contract_source_metadata` is still `{"version":"0.1.0","link":"https://github.com/aoyamari/Bound",...,"build_info":null}`. That `link` is the prior repository string inside the deployed bytes. It is not the current public source URL. The bytes do not carry a git commit. `.github/workflows/contract-provenance.yml` can set `NEP330_BUILD_INFO_*` on a later build; it was not used for this deploy, and this follow-up does not change the contract.
+Read-only `view_code` (2026-11-06): base58 `FagUutviDcjAKZY6Crv8Aj7H3T41jkqBFhuH1kCGWf3m`, SHA256 `d8a46cdd310339fb0c9654eacdc7879894e0663038a64039e684b1d72d733110`, 255,688 bytes. `contract_source_metadata` is still `{"version":"0.1.0","link":"https://github.com/aoyamari/Bound",...,"build_info":null}`. That `link` is the prior repository string inside the deployed bytes. It is not the current public source URL. The bytes do not carry a git commit. `.github/workflows/contract-provenance.yml` can set `NEP330_BUILD_INFO_*` on a later build; it was not used for this deploy, and this follow-up does not change the contract. `Cargo.toml` `repository` in source is now `https://github.com/xzLawliet/Bound`. That edit does not replace the `link` recorded in the bytes on `guardian.bound-aoyamari.testnet`.
 
 `get_policy` after the upgrade: owner `bound-aoyamari.testnet`, max `250000000000000000000000` (0.25 NEAR), daily `500000000000000000000000` (0.5 NEAR), `paused` false, whitelist only `vendor.bound-aoyamari.testnet`.
 
@@ -57,14 +78,16 @@ Direct native transfer of 1 yoctoNEAR using the same agent key was attempted bef
 
 ## Static dashboard hosting
 
-The client-only dashboard is live at https://xzlawliet.github.io/Bound/. GitHub Pages serves the `gh-pages` branch of https://github.com/xzLawliet/Bound from `/`, and the site base path is `/Bound/`. The page title is `Bound — Autonomy, within bounds.` The published build serves `/Bound/assets/index-Z9pJAv1H.js` and `/Bound/assets/index-BlP7_agH.css`. RPC is public read access; no keys enter the browser.
+The client-only dashboard is live at https://xzlawliet.github.io/Bound/. GitHub Pages serves the `gh-pages` branch of https://github.com/xzLawliet/Bound from `/`, and the site base path is `/Bound/`. The page title is `Bound — Autonomy, within bounds.` The published build serves `/Bound/assets/index-Z9pJAv1H.js` and `/Bound/assets/index-BlP7_agH.css`. That published build still requests `guardian.bound-aoyamari.testnet`. Source now requests `guardian.xzlawliet.testnet` (previously `guardian.bound-aoyamari.testnet`) and is not published by this change. RPC is public read access; no keys enter the browser.
 
 ## State reads
 
+Use these only after code exists on `guardian.xzlawliet.testnet` (previously `guardian.bound-aoyamari.testnet`). No code or policy is recorded there, so these commands are not a result. They were not run for this change. Earlier reads used `guardian.bound-aoyamari.testnet`, `vendor.bound-aoyamari.testnet`, and `agent.bound-aoyamari.testnet`.
+
 ```bash
-near contract call-function as-read-only guardian.bound-aoyamari.testnet get_policy json-args '{}' network-config testnet now
-near contract call-function as-read-only guardian.bound-aoyamari.testnet can_spend json-args '{"receiver":"vendor.bound-aoyamari.testnet","amount":"300000000000000000000000"}' network-config testnet now
-near account list-keys agent.bound-aoyamari.testnet network-config testnet now
+near contract call-function as-read-only guardian.xzlawliet.testnet get_policy json-args '{}' network-config testnet now
+near contract call-function as-read-only guardian.xzlawliet.testnet can_spend json-args '{"receiver":"vendor.xzlawliet.testnet","amount":"300000000000000000000000"}' network-config testnet now
+near account list-keys agent.xzlawliet.testnet network-config testnet now
 ```
 
 
@@ -72,7 +95,7 @@ near account list-keys agent.bound-aoyamari.testnet network-config testnet now
 
 The demo now uses supported SDK 7.4.0 (`Account`, `KeyPairSigner`, explicit bigint gas and deposit). `npm audit` reports zero production vulnerabilities. Old v5 `connect`/`keyStores` APIs are no longer required. If using an external credential key JSON, `KeyPairSigner.fromSecretKey` expects the `ed25519:` prefix.
 
-Latest end-to-end demo on the first bytecode (these receipts are not the upgraded wasm):
+Latest end-to-end demo on the first bytecode of previous guardian `guardian.bound-aoyamari.testnet` (these receipts are not the upgraded wasm, and they are not receipts for `guardian.xzlawliet.testnet`, previously `guardian.bound-aoyamari.testnet`):
 - [Allowed 0.1 NEAR](https://explorer.testnet.near.org/transactions/BuuwybQdwNjbqNt4hgxp5ssFkePr3REQQtNCvURKAMdC) -> accumulated day usage exactly 0.5 NEAR.
 - [Over-max rejection](https://explorer.testnet.near.org/transactions/3cL4xH9gBxbLdoc7678rJqJYMHMNAprBZitcJeVtd1Z7)
 - [Non-whitelisted rejection](https://explorer.testnet.near.org/transactions/7RYBvjzyTin3w7YmUvsNp2bLswwq51Kqp8AQaNc8e66W)

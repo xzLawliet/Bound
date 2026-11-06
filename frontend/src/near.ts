@@ -1,6 +1,7 @@
 /** Public NEAR testnet view helpers — no keys, no wallet. */
 
-export const CONTRACT_ID = 'guardian.bound-aoyamari.testnet'
+/** Active guardian id. Previously `guardian.bound-aoyamari.testnet`. The account can exist before code; this constant is not a deploy and not a policy. Published Pages still calls the previous id. */
+export const CONTRACT_ID = 'guardian.xzlawliet.testnet'
 export const RPC_URL = 'https://rpc.testnet.near.org'
 export const EXPLORER_URL = `https://explorer.testnet.near.org/accounts/${CONTRACT_ID}`
 export const YOCTO_PER_NEAR = 10n ** 24n
