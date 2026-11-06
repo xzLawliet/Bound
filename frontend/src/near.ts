@@ -1,6 +1,6 @@
 /** Public NEAR testnet view helpers — no keys, no wallet. */
 
-/** Active guardian id. Previously `guardian.bound-aoyamari.testnet`. The account can exist before code; this constant is not a deploy and not a policy. Published Pages still calls the previous id. */
+/** Active guardian. Archive id: `guardian.bound-aoyamari.testnet`. Published Pages still calls the archive id. */
 export const CONTRACT_ID = 'guardian.xzlawliet.testnet'
 export const RPC_URL = 'https://rpc.testnet.near.org'
 export const EXPLORER_URL = `https://explorer.testnet.near.org/accounts/${CONTRACT_ID}`

@@ -20,3 +20,4 @@ scripts/.env.*
 *.pem
 *-key.json
 credentials/
+**/.private-backup/

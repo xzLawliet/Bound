@@ -2,11 +2,11 @@
 
 `demo-agent.mjs` makes three real NEAR testnet transactions using an agent with a Function Call access key, then attempts one forbidden native NEAR transfer.
 
-Public source is https://github.com/xzLawliet/Bound. `scripts/.env.example` now targets guardian `guardian.xzlawliet.testnet` (previously `guardian.bound-aoyamari.testnet`), agent `agent.xzlawliet.testnet` (previously `agent.bound-aoyamari.testnet`), and vendor `vendor.xzlawliet.testnet` (previously `vendor.bound-aoyamari.testnet`). Owner for that namespace is `xzlawliet.testnet` (previously `bound-aoyamari.testnet`). `SCAM_ACCOUNT_ID` stays `near-examples.testnet`. Amounts are unchanged: 0.1 NEAR allowed attempt, 0.3 NEAR over the intended 0.25 max.
+Public source is https://github.com/xzLawliet/Bound. `scripts/.env.example` targets guardian `guardian.xzlawliet.testnet`, agent `agent2.xzlawliet.testnet`, and vendor `vendor.xzlawliet.testnet`. Owner is `xzlawliet.testnet`. `SCAM_ACCOUNT_ID` stays `near-examples.testnet`. Amounts: 0.1 NEAR allowed, 0.3 NEAR over the 0.25 max.
 
-Account creation and contract deploy are separate. Owner `xzlawliet.testnet` exists (10 NEAR faucet `HCTPTiMUQhCzHKLKYKspcz7aTgSjwgxspSpq7sDbVEAA`, not a contract deploy). `guardian.xzlawliet.testnet` exists with 5 NEAR and has no recorded code or policy. Agent and vendor are not recorded yet. This repository change does not send transactions. Dashboard source calls `guardian.xzlawliet.testnet` (previously `guardian.bound-aoyamari.testnet`). The published site https://xzlawliet.github.io/Bound/ still calls `guardian.bound-aoyamari.testnet`.
+The 2026-11-06 run on this guardian ended with `spent_today` exactly 0.1 NEAR. Receipts are in the README live proof. `agent.xzlawliet.testnet` is unused (gas allowance 0, no successful payments). The private key stays in ignored `.env.local`. https://xzlawliet.github.io/Bound/ still calls legacy guardian `guardian.bound-aoyamari.testnet` until a later publish from `main`.
 
-On 2026-11-06 UTC the previous guardian `guardian.bound-aoyamari.testnet` was already at 0.5 / 0.5. That observation is not a result for `guardian.xzlawliet.testnet`. A full `npm run demo` against the previous account stops before a new positive payment. See `DEV.md` for that previous account's code hash. This file is not a migration receipt.
+A 0.5 / 0.5 day in `DEV.md` is a legacy old guardian receipt for `guardian.bound-aoyamari.testnet`, not this balance. `npm run demo` still refuses when the active daily headroom is gone.
 
 ## Run (repeat with a funded agent, within the daily allowance)
 

@@ -102,45 +102,39 @@ cargo build --release --target wasm32-unknown-unknown
 ---
 
 
-## Active testnet target
+## Live proof (2026-11-06)
 
-Source targets this namespace. This repository change does not submit transactions. Account creation and contract deploy are separate. No contract code and no policy are recorded on `guardian.xzlawliet.testnet`.
+Owner `xzlawliet.testnet`. Guardian [`guardian.xzlawliet.testnet`](https://explorer.testnet.near.org/accounts/guardian.xzlawliet.testnet). Agent `agent2.xzlawliet.testnet`. Vendor `vendor.xzlawliet.testnet`. Unknown receiver `near-examples.testnet`. Policy: max **0.25 NEAR**, daily **0.5 NEAR**, unpaused at the end of the run. `spent_today` was exactly **0.1 NEAR**.
 
-| Role | Active id | Previously active | Recorded so far |
-|---|---|---|---|
-| Owner | `xzlawliet.testnet` | `bound-aoyamari.testnet` | Account exists. Faucet of 10 NEAR: [`HCTPTiMUQhCzHKLKYKspcz7aTgSjwgxspSpq7sDbVEAA`](https://explorer.testnet.near.org/transactions/HCTPTiMUQhCzHKLKYKspcz7aTgSjwgxspSpq7sDbVEAA). Account creation only, not a contract deploy. |
-| Guardian | [`guardian.xzlawliet.testnet`](https://explorer.testnet.near.org/accounts/guardian.xzlawliet.testnet) | `guardian.bound-aoyamari.testnet` | Account created with 5 NEAR. Creation transaction omitted. No code and no policy are recorded. |
-| Agent | `agent.xzlawliet.testnet` | `agent.bound-aoyamari.testnet` | Not recorded. Setup is in progress. |
-| Vendor whitelist | `vendor.xzlawliet.testnet` | `vendor.bound-aoyamari.testnet` | Not recorded. Setup is in progress. |
+| Step | Result | Transaction |
+|---|---|---|
+| Deploy and init | Wasm SHA256 `d8a46cdd310339fb0c9654eacdc7879894e0663038a64039e684b1d72d733110`, source `9e58556` | [C4ECGqdc…](https://explorer.testnet.near.org/transactions/C4ECGqdcki9YV9ZZUbTdzuFYoyNH48poWXSna4NGTQ9y) |
+| Whitelist | `vendor.xzlawliet.testnet` added by `xzlawliet.testnet` | [BL1QBjbx…](https://explorer.testnet.near.org/transactions/BL1QBjbxW13tiXj2RyM2PWCz7GaEVsCxxB5hcPdbaE5B) |
+| Create agent2 | Second limited account | [F9LXENTG…](https://explorer.testnet.near.org/transactions/F9LXENTGCouNQxDabduV5Wob8MzbnbwS1qM2PwBAsHQa) |
+| Function-call key | `ed25519:AjkYUs1vp7MvfwJmXHs1vaYfYcMT7uEK6EhLU5uksE2c`, method `spend` only, receiver `guardian.xzlawliet.testnet`, initial gas allowance exactly 0.25 NEAR | [FTVzRfsj…](https://explorer.testnet.near.org/transactions/FTVzRfsjWK1x4UMVDEVpAXUhRDewRRBf69GpDPgWwNrH) |
+| Remove bootstrap | Full-access key deleted after the function-call key | [3b77Pr5x…](https://explorer.testnet.near.org/transactions/3b77Pr5xeonRQnWULnzsDn56xDcZAu5PqE5zzPWnxUBS) |
+| Allowed 0.1 NEAR | `SpendAllowed` to `vendor.xzlawliet.testnet` | [CmDoLMHx…](https://explorer.testnet.near.org/transactions/CmDoLMHxw6of9qPLZc1RntH3ZuQS4uuh7mMDuG1mR6qZ) |
+| Over max 0.3 NEAR | Rejected | [GSJ6Jd6q…](https://explorer.testnet.near.org/transactions/GSJ6Jd6q6oGfjw91a6nQoTRcerxvJ48JJeYXvhHkg1Cc) |
+| `near-examples.testnet` 0.1 NEAR | Rejected, not whitelisted | [HGtfkbpY…](https://explorer.testnet.near.org/transactions/HGtfkbpYV99BTVB77eRKU3SbRWaBQKoj75NoLXwedexR) |
+| Native transfer | Blocked `AccessKeyRequiresFullAccessActionError` | No successful transfer |
+| Pause | Owner pause | [BKH74dMT…](https://explorer.testnet.near.org/transactions/BKH74dMTfo76QXQrrAiA4G8N89kqfQ9FHV89yxEsWLjc) |
+| Spend while paused | Rejected | [Ffj9zMx2…](https://explorer.testnet.near.org/transactions/Ffj9zMx2DXdJFnXLHtXwVYV75d7tVfUemrEyoVA1BQsW) |
+| Unpause | Guardian left unpaused | [5zFyRDCH…](https://explorer.testnet.near.org/transactions/5zFyRDCHbByoPwL11soDg6cNoTCP8v2cZDsGofr93ZpR) |
 
-Intended init limits remain max **0.25 NEAR/payment** and **0.5 NEAR/day**. Those numbers are not a `get_policy` result on the new guardian. The unknown receiver stays `near-examples.testnet`.
+The 0.25 NEAR on the function-call key is the near-api-js default gas budget, set by omitting an allowance. It is not full access and it is not the treasury cap. After this run the remaining gas allowance was about 0.2492 NEAR. The private key stays local. Owner account creation, not a deploy: [`HCTPTiMUQhCzHKLKYKspcz7aTgSjwgxspSpq7sDbVEAA`](https://explorer.testnet.near.org/transactions/HCTPTiMUQhCzHKLKYKspcz7aTgSjwgxspSpq7sDbVEAA) (10 NEAR).
 
-`frontend/src/near.ts` calls `guardian.xzlawliet.testnet` (previously `guardian.bound-aoyamari.testnet`). Until code is deployed, that call has no policy to show. The published dashboard https://xzlawliet.github.io/Bound/ still calls `guardian.bound-aoyamari.testnet`. This change does not publish Pages.
+`agent.xzlawliet.testnet` is an unused first account. Its key had gas allowance 0 and it made no successful payments. The active agent is `agent2.xzlawliet.testnet`.
 
-### Policy read after deploy
+The deployed wasm is the `9e58556` build. `Cargo.toml` `repository` in this tree is `https://github.com/xzLawliet/Bound`, and that edit was not compiled into the wasm. Legacy old guardian receipts, including that account's 0.5 NEAR day, are in [`DEV.md`](DEV.md). They are not this guardian's balance.
+
+`frontend/src/near.ts` calls `guardian.xzlawliet.testnet`, and the header shows that id in exact case. Scenario rows use `vendor.xzlawliet.testnet` and `near-examples.testnet`. https://xzlawliet.github.io/Bound/ still serves the published bundle, which calls `guardian.bound-aoyamari.testnet`, until a later publish from `main`. This change does not publish Pages.
 
 ```bash
 near contract call-function as-read-only guardian.xzlawliet.testnet get_policy json-args '{}' network-config testnet now
-near account list-keys agent.xzlawliet.testnet network-config testnet now
+near account list-keys agent2.xzlawliet.testnet network-config testnet now
 ```
 
-These commands were not run for this change. They are not evidence of code or policy. No contract is recorded on `guardian.xzlawliet.testnet` (previously `guardian.bound-aoyamari.testnet`).
-
-## Historical testnet proof
-
-Previous guardian: `guardian.bound-aoyamari.testnet`. It was initially funded with 5 testnet NEAR; max **0.25 NEAR/payment**, **0.5 NEAR/day**; whitelisted vendor `vendor.bound-aoyamari.testnet`. The receipts below belong to that account. They are not receipts for `guardian.xzlawliet.testnet` (previously `guardian.bound-aoyamari.testnet`).
-
-The agent's only key is allowed to call `spend`; the bootstrap full-access key was removed. All facts and setup details: [`DEV.md`](DEV.md).
-
-| Verification | On-chain result | Transaction |
-|---|---|---|
-| Whitelisted payment of 0.1 NEAR | `SpendAllowed` | [Open](https://explorer.testnet.near.org/transactions/3pNHTmanHQ8gPtnQNVeCLt7k4YuemMYNc9aTL6NtYoqR) |
-| 0.3 NEAR exceeds cap | `SpendRejected: over_max_per_tx` | [Open](https://explorer.testnet.near.org/transactions/B8p9RA7zqgARfrJ6g1k1mrPP1Mx63urtPfJ3po6V1Z4x) |
-| Unwhitelisted receiver | `SpendRejected: not_whitelisted` | [Open](https://explorer.testnet.near.org/transactions/CbaJYocRDNseff9iAtpchbtD8o6pcy6WvHQxssL3Mbn9) |
-
-Those receipts, and the later allowed payment that filled the UTC day to 0.5 NEAR, are the first bytecode on `guardian.bound-aoyamari.testnet`. The account was then upgraded in place (`without-init-call`) from contract source `9e585567f69163f1e9bbbc4d53e35e9a9901983c`, an ancestor of current `main`. That code hash and the preserved policy are in [`DEV.md`](DEV.md). No new positive payment has been made on the upgraded wasm: the 2026-11-06 daily cap on that previous guardian is already 0.5 / 0.5. That daily total is not a result for `guardian.xzlawliet.testnet` (previously `guardian.bound-aoyamari.testnet`); migration receipts are still pending. The negative direct-transfer test is rejected as `RequiresFullAccess` (SDK v7: `AccessKeyRequiresFullAccessActionError`).
-
-Install with `npm install -g near-cli-rs@latest`; contract needs Rust 1.88+. Run `cargo test --manifest-path contracts/agent-guardian/Cargo.toml` and follow `DEV.md` for parameters. `docs/DEPLOY.md` separates the first wasm (path-sensitive rebuild of `469b74b`–`31ab724`) from the previous guardian's upgrade hash. Dashboard source lives in `frontend/` and is published from the `gh-pages` branch of https://github.com/xzLawliet/Bound. The live dashboard is https://xzlawliet.github.io/Bound/. Source scenario receivers are `vendor.xzlawliet.testnet` (previously `vendor.bound-aoyamari.testnet`) and `near-examples.testnet`. The published Pages bundle still calls `guardian.bound-aoyamari.testnet`. The read-only dashboard fetches `get_policy` and `can_spend`; scenario cards are dry-run views, **not payments**. Owner controls are implemented through NEAR CLI only; no browser wallet or production deploy yet.
+Install with `npm install -g near-cli-rs@latest`; contract needs Rust 1.88+. Run `cargo test --manifest-path contracts/agent-guardian/Cargo.toml`. Dashboard source lives in `frontend/`. The read-only dashboard fetches `get_policy` and `can_spend`; scenario cards are dry-run views, **not** the payments in the table above. Owner controls are NEAR CLI only.
 
 ## Do X → see Y (AI screener / judges)
 

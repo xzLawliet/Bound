@@ -1,10 +1,8 @@
 # Reproduce Bound on NEAR testnet
 
-Active source targets: owner `xzlawliet.testnet` (previously `bound-aoyamari.testnet`), guardian `guardian.xzlawliet.testnet` (previously `guardian.bound-aoyamari.testnet`), agent `agent.xzlawliet.testnet` (previously `agent.bound-aoyamari.testnet`), vendor `vendor.xzlawliet.testnet` (previously `vendor.bound-aoyamari.testnet`). Intended init limits remain 0.25 NEAR max per payment and 0.5 NEAR per UTC day. Those limits are not a recorded `get_policy` on the new guardian. The unknown demo receiver stays `near-examples.testnet`.
+Active instance: owner `xzlawliet.testnet`, guardian `guardian.xzlawliet.testnet`, agent `agent2.xzlawliet.testnet`, vendor `vendor.xzlawliet.testnet`. Limits 0.25 NEAR max / 0.5 NEAR daily. Unknown receiver `near-examples.testnet`. The 2026-11-06 run ended unpaused with `spent_today` exactly 0.1 NEAR. Full receipt list: README live proof. Deploy [`C4ECGqdcki9YV9ZZUbTdzuFYoyNH48poWXSna4NGTQ9y`](https://explorer.testnet.near.org/transactions/C4ECGqdcki9YV9ZZUbTdzuFYoyNH48poWXSna4NGTQ9y) uses wasm SHA256 `d8a46cdd310339fb0c9654eacdc7879894e0663038a64039e684b1d72d733110` from source `9e58556`. `Cargo.toml` `repository` is `https://github.com/xzLawliet/Bound` and was not compiled into that wasm. `agent.xzlawliet.testnet` is unused (gas allowance 0, no successful payments).
 
-Account creation and contract deploy are separate. Owner `xzlawliet.testnet` exists; its 10 NEAR faucet is [`HCTPTiMUQhCzHKLKYKspcz7aTgSjwgxspSpq7sDbVEAA`](https://explorer.testnet.near.org/transactions/HCTPTiMUQhCzHKLKYKspcz7aTgSjwgxspSpq7sDbVEAA). That receipt is not a contract deploy. `guardian.xzlawliet.testnet` was created with 5 NEAR; the creation transaction is omitted. No code and no policy are recorded on that account. Agent and vendor setup is in progress and is not recorded here. This file does not submit a transaction.
-
-The command history below is what was used for `guardian.bound-aoyamari.testnet`, with replaceable placeholders. Use **your own account** for all `YOUR_NAME.testnet` mentions. All accounts and funds here are testnet. The published dashboard still calls `guardian.bound-aoyamari.testnet`. `frontend/src/near.ts` now calls `guardian.xzlawliet.testnet` (previously `guardian.bound-aoyamari.testnet`). Until code is deployed, that call has no policy to show.
+The commands below use `YOUR_NAME.testnet` placeholders. They are the reproduce path, not a second copy of the live receipts. Legacy old guardian receipts for `guardian.bound-aoyamari.testnet` stay later in this file. https://xzlawliet.github.io/Bound/ still calls that legacy guardian until a later publish from `main`. `frontend/src/near.ts` calls `guardian.xzlawliet.testnet`.
 
 ## Build
 
@@ -43,7 +41,7 @@ near contract call-function as-read-only guardian.YOUR_NAME.testnet get_policy j
 
 ## Agent access key
 
-`near account add-key grant-function-call-access` might require a TTY (best used interactively). For a headless supported SDK path, generate a new `ed25519` key with `KeyPair.fromRandom` in `near-api-js` and store it in ignored local credentials. With the **full access bootstrap key still in the account**:
+Use the near-api-js path below. Do not rely on `near account add-key` with no allowance flag: that CLI can prompt for unlimited or for zero, and neither is the allowance used here. Omitting `allowance` in `addFunctionCallAccessKey` is the SDK default, exactly 0.25 NEAR of gas budget. That number is not the treasury `max_per_tx` and it is not full access. Generate an `ed25519` key with `KeyPair.fromRandom` and keep the secret in an ignored local file. With the full-access bootstrap key still on the account:
 
 ```js
 await account.addFunctionCallAccessKey({ publicKey: generatedPublicKey, contractId: 'guardian.YOUR_NAME.testnet', methodNames: ['spend'] })
@@ -51,7 +49,7 @@ await account.deleteKey(bootstrapPublicKey)
 console.log(await account.getAccessKeys())
 ```
 
-Afterwards the agent account should have a single Function Call permission restricted to the guardian and `spend`; remove revoked bootstrap credential files as well. Do not add your real user's NEAR keys to the agent's account or send them in chat.
+Afterwards the agent account should have one Function Call permission, receiver the guardian, method `spend` only. Delete the bootstrap key only after that function-call key exists. Do not commit private keys or send them in chat. The active key on `agent2.xzlawliet.testnet` is `ed25519:AjkYUs1vp7MvfwJmXHs1vaYfYcMT7uEK6EhLU5uksE2c`, added in [`FTVzRfsjWK1x4UMVDEVpAXUhRDewRRBf69GpDPgWwNrH`](https://explorer.testnet.near.org/transactions/FTVzRfsjWK1x4UMVDEVpAXUhRDewRRBf69GpDPgWwNrH), bootstrap removed in [`3b77Pr5xeonRQnWULnzsDn56xDcZAu5PqE5zzPWnxUBS`](https://explorer.testnet.near.org/transactions/3b77Pr5xeonRQnWULnzsDn56xDcZAu5PqE5zzPWnxUBS). Initial allowance was exactly 0.25 NEAR. After the 2026-11-06 run it was about 0.2492 NEAR.
 
 Set `OWNER_ACCOUNT_ID` and `OWNER_PRIVATE_KEY` locally to use owner admin calls. Add `owner-id` and an admin script before browser wallet signing; until then, CLI owner controls are the implemented admin path.
 
@@ -68,14 +66,15 @@ npm run demo -- --negative-only
 npm run demo -- --paused-check
 ```
 
-The script confirms (executed and verified with near-api-js 7.4 on NEAR testnet, on the first bytecode):
-- Allowed 0.1 NEAR transfer to whitelisted vendor;
-- 0.3 NEAR rejected over-max;
-- 0.1 NEAR to an unknown receiver rejected;
-- `spent_today` correct before and after, not hardcoded;
-- Native 1 yoctoNEAR transfer fails using the exact Function Call key.
+On `guardian.xzlawliet.testnet` with `agent2.xzlawliet.testnet`, the 2026-11-06 run recorded:
+- Allowed 0.1 NEAR to `vendor.xzlawliet.testnet`: [`CmDoLMHxw6of9qPLZc1RntH3ZuQS4uuh7mMDuG1mR6qZ`](https://explorer.testnet.near.org/transactions/CmDoLMHxw6of9qPLZc1RntH3ZuQS4uuh7mMDuG1mR6qZ)
+- 0.3 NEAR rejected over max: [`GSJ6Jd6q6oGfjw91a6nQoTRcerxvJ48JJeYXvhHkg1Cc`](https://explorer.testnet.near.org/transactions/GSJ6Jd6q6oGfjw91a6nQoTRcerxvJ48JJeYXvhHkg1Cc)
+- 0.1 NEAR to `near-examples.testnet` rejected: [`HGtfkbpYV99BTVB77eRKU3SbRWaBQKoj75NoLXwedexR`](https://explorer.testnet.near.org/transactions/HGtfkbpYV99BTVB77eRKU3SbRWaBQKoj75NoLXwedexR)
+- Native transfer blocked `AccessKeyRequiresFullAccessActionError`
+- `spent_today` exactly 0.1 NEAR
+- Pause [`BKH74dMTfo76QXQrrAiA4G8N89kqfQ9FHV89yxEsWLjc`](https://explorer.testnet.near.org/transactions/BKH74dMTfo76QXQrrAiA4G8N89kqfQ9FHV89yxEsWLjc), paused rejection [`Ffj9zMx2DXdJFnXLHtXwVYV75d7tVfUemrEyoVA1BQsW`](https://explorer.testnet.near.org/transactions/Ffj9zMx2DXdJFnXLHtXwVYV75d7tVfUemrEyoVA1BQsW), unpause [`5zFyRDCHbByoPwL11soDg6cNoTCP8v2cZDsGofr93ZpR`](https://explorer.testnet.near.org/transactions/5zFyRDCHbByoPwL11soDg6cNoTCP8v2cZDsGofr93ZpR)
 
-Those positive payments filled the 2026-11-06 UTC day to 0.5 / 0.5 before the in-place upgrade. The current wasm has no new positive payment. `npm run demo` reads daily usage first and refuses when headroom is gone, so a full run on that day stops before another allowed spend. `--negative-only` and `--paused-check` do not require daily headroom. See `DEV.md` for the current code hash `FagUutviDcjAKZY6Crv8Aj7H3T41jkqBFhuH1kCGWf3m`.
+`npm run demo` reads daily usage first and refuses when headroom is gone. The 0.5 / 0.5 day in the legacy section is `guardian.bound-aoyamari.testnet`, not this balance. The active wasm SHA256 is `d8a46cdd310339fb0c9654eacdc7879894e0663038a64039e684b1d72d733110` (base58 `FagUutviDcjAKZY6Crv8Aj7H3T41jkqBFhuH1kCGWf3m` on the legacy upgrade of the same bytes).
 
 Agent `--paused-check` expects owner already paused and will return success only on `reason=paused`. Restore owner unpause manually with CLI.
 
@@ -130,13 +129,13 @@ This identifies the first deployed source as that identical contract tree, not o
 
 `scripts/contract-provenance.py` prints SHA256, base58, and the embedded NEP-330 JSON for a wasm. Its encoder self-test still uses the first digest above; that pair is not the current code hash. `.github/workflows/contract-provenance.yml` is an optional later build: it sets `NEP330_BUILD_INFO_SOURCE_CODE_SNAPSHOT` to `HEAD` and remaps paths to `/cargo-home` and `/workspace`, then uploads a wasm artifact. This upgrade did not use those variables (`build_info` is null) and this follow-up does not change the contract.
 
-### Second wasm on previous guardian `guardian.bound-aoyamari.testnet`
+### Legacy old guardian receipts: second wasm on `guardian.bound-aoyamari.testnet`
 
-Contract code has not moved to `guardian.xzlawliet.testnet` (previously `guardian.bound-aoyamari.testnet`). No deploy receipt is recorded here. Account creation is separate from this wasm.
+Legacy. The active deploy [`C4ECGqdcki9YV9ZZUbTdzuFYoyNH48poWXSna4NGTQ9y`](https://explorer.testnet.near.org/transactions/C4ECGqdcki9YV9ZZUbTdzuFYoyNH48poWXSna4NGTQ9y) on `guardian.xzlawliet.testnet` uses this same SHA256 from source `9e585567f69163f1e9bbbc4d53e35e9a9901983c`. This section is the old account. Its 0.5 NEAR day is not the active `spent_today` of 0.1 NEAR.
 
 Upgrade deploy [`Cb6saE7z...`](https://explorer.testnet.near.org/transactions/Cb6saE7zu8kRQUYTqqhjgmNpzooTTLJsov7FEvy4HCwH) of contract source `9e585567f69163f1e9bbbc4d53e35e9a9901983c`. That commit is the contract-source ancestor of https://github.com/xzLawliet/Bound `main`. Documentation commits after it leave the contract at that source. One `DeployContract` action and no init call. Read-only `view_code` matches base58 `FagUutviDcjAKZY6Crv8Aj7H3T41jkqBFhuH1kCGWf3m`, SHA256 `d8a46cdd310339fb0c9654eacdc7879894e0663038a64039e684b1d72d733110`, 255,688 bytes. No compiler version is claimed here for that file. The same observations were first recorded on the prior repository in [pull request #2](https://github.com/aoyamari/Bound/pull/2).
 
-State survived the upgrade. Read-only `get_policy`: owner `bound-aoyamari.testnet`, max 0.25 NEAR, daily 0.5 NEAR, not paused, whitelist only `vendor.bound-aoyamari.testnet`. On UTC day bucket `20763` (2026-11-06), `get_spent_today` is 0.5 NEAR, so this wasm has taken no new positive payment. `can_spend`: vendor 0.3 NEAR `over_max_per_tx`; `near-examples.testnet` 0.1 NEAR `not_whitelisted`; vendor 0.1 NEAR `over_daily_limit`. Receipt-level over-max and non-whitelist spends on this wasm are still pending because the demo script refuses when the day is full.
+Legacy state after that upgrade: `get_policy` owner `bound-aoyamari.testnet`, max 0.25 NEAR, daily 0.5 NEAR, not paused, whitelist only `vendor.bound-aoyamari.testnet`. On UTC day bucket `20763` (2026-11-06), legacy `get_spent_today` is 0.5 NEAR. That is a legacy old guardian receipt. Active `spent_today` on `guardian.xzlawliet.testnet` for the same date is exactly 0.1 NEAR. Legacy `can_spend` on the old account: vendor 0.3 NEAR `over_max_per_tx`; `near-examples.testnet` 0.1 NEAR `not_whitelisted`; vendor 0.1 NEAR `over_daily_limit`.
 
 `view_access_key_list` for `agent.bound-aoyamari.testnet`: one key, `ed25519:7MMphMSA1J6R9w9kWL2RJmj3nvC8P3T32dDYy2TyExA3`, Function Call, receiver `guardian.bound-aoyamari.testnet`, method `spend` only. A direct transfer with that key was rejected `AccessKeyRequiresFullAccessActionError` and was not repeated here. Pause proof: [`7uUR1gfa...`](https://explorer.testnet.near.org/transactions/7uUR1gfap394ABxjmsieZgEQWXa31zMSCgkoi1MVnsF5), agent rejection [`DBoVGpNm...`](https://explorer.testnet.near.org/transactions/DBoVGpNmUkLBX4M7Xars3JtmUuw9gASv5RMkeG1H3EEe), unpause [`G7HnvG3f...`](https://explorer.testnet.near.org/transactions/G7HnvG3fezT7jeWuzAWaAWn2EVw4Yx3JFumntZ8TZaD4).
 
@@ -150,11 +149,11 @@ curl -s https://rpc.testnet.near.org -H 'content-type: application/json' \
   -d '{"jsonrpc":"2.0","id":"bound-meta","method":"query","params":{"request_type":"call_function","finality":"final","account_id":"guardian.bound-aoyamari.testnet","method_name":"contract_source_metadata","args_base64":"e30="}}'
 ```
 
-Agent key scope remains off-chain for that previous account: `near account list-keys agent.bound-aoyamari.testnet network-config testnet now`. The same checks against `guardian.xzlawliet.testnet` (previously `guardian.bound-aoyamari.testnet`) and `agent.xzlawliet.testnet` (previously `agent.bound-aoyamari.testnet`) were not run. No code or policy is recorded on the new guardian.
+Legacy agent key scope: `near account list-keys agent.bound-aoyamari.testnet network-config testnet now`. The active agent is `agent2.xzlawliet.testnet`. `agent.xzlawliet.testnet` is unused.
 
 ### Frontend
 
-React/Vite/TypeScript, public `get_policy`, `get_spent_today` and `can_spend` via `fetch`; no browser key. Source calls `guardian.xzlawliet.testnet` (previously `guardian.bound-aoyamari.testnet`). The published Pages build still calls `guardian.bound-aoyamari.testnet`. Owner wallet UI is not wired yet until specifically completed; not represented as live admin. The required Node version is >=22.22.2. For a supplied secret in NEAR account credential JSON, keep the key file outside the repo and pass `AGENT_KEY_FILE`.
+React/Vite/TypeScript, public `get_policy`, `get_spent_today` and `can_spend` via `fetch`; no browser key. Source calls `guardian.xzlawliet.testnet`. The header shows that id in exact case. The published Pages build still calls archive guardian `guardian.bound-aoyamari.testnet`. Owner wallet UI is not wired yet until specifically completed; not represented as live admin. The required Node version is >=22.22.2. For a supplied secret in NEAR account credential JSON, keep the key file outside the repo and pass `AGENT_KEY_FILE`.
 
 ## Dashboard publishing
 
@@ -166,4 +165,4 @@ npm ci
 npm run publish
 ```
 
-`publish` runs tests, builds, then uses a dev-only `gh-pages` package to deploy `dist` to the `gh-pages` branch of https://github.com/xzLawliet/Bound. Pages deploys that branch from `/`. The live site is https://xzlawliet.github.io/Bound/. `frontend/vite.config.ts` has the `/Bound/` base. The published build serves `/Bound/assets/index-Z9pJAv1H.js` and `/Bound/assets/index-BlP7_agH.css` and still calls `guardian.bound-aoyamari.testnet`. This change does not run `npm run publish`. A later publish would be required before Pages calls `guardian.xzlawliet.testnet` (previously `guardian.bound-aoyamari.testnet`). Browser RPC is public GET-style contract view through JSON-RPC. Direct contract mutation is CLI-only in MVP; the web app has no wallet or credentials.
+`publish` runs tests, builds, then uses a dev-only `gh-pages` package to deploy `dist` to the `gh-pages` branch of https://github.com/xzLawliet/Bound. Pages deploys that branch from `/`. The live site is https://xzlawliet.github.io/Bound/. `frontend/vite.config.ts` has the `/Bound/` base. The published build serves `/Bound/assets/index-Z9pJAv1H.js` and `/Bound/assets/index-BlP7_agH.css` and still calls legacy guardian `guardian.bound-aoyamari.testnet`. This change does not run `npm run publish`. https://xzlawliet.github.io/Bound/ shows `guardian.xzlawliet.testnet` only after a later publish from `main`. Browser RPC is public GET-style contract view through JSON-RPC. Direct contract mutation is CLI-only in MVP; the web app has no wallet or credentials.

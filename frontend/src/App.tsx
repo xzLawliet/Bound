@@ -22,7 +22,7 @@ type Scenario = {
   blurb: string
 }
 
-// Vendor target is vendor.xzlawliet.testnet (previously vendor.bound-aoyamari.testnet).
+// Vendor target is vendor.xzlawliet.testnet. Archive vendor: vendor.bound-aoyamari.testnet.
 // Unlisted receiver stays near-examples.testnet.
 const SCENARIOS: Scenario[] = [
   {
