@@ -10,7 +10,7 @@
 - Whitelist `vendor.bound-aoyamari.testnet`
 - Config: 0.25 NEAR max payment / 0.5 NEAR per UTC day
 - Testnet treasury ~5 NEAR; first deploy [transaction](https://explorer.testnet.near.org/transactions/GdqpWg8PvXefyA3Y4ShMo2d73fxFp5CaqovCs6MBWrmg). That transaction id is not a git commit. See `docs/DEPLOY.md` for the first wasm's source range.
-- Public source for this tree: https://github.com/xzLawliet/Bound at `9e585567f69163f1e9bbbc4d53e35e9a9901983c`
+- Public source: https://github.com/xzLawliet/Bound. Deployed contract source is ancestor `9e585567f69163f1e9bbbc4d53e35e9a9901983c`. Commits after that ancestor on `main` are documentation.
 - Add whitelist [transaction](https://explorer.testnet.near.org/transactions/4DfDaNBXAKtPHuzATaMnC6b3r6E2G1QWZSBB8FvgrtZh)
 - Added Function Call key [transaction](https://explorer.testnet.near.org/transactions/EodNEt68piFniETwQLxMKRaJDNK5bR5o6DDtreXEY639)
 - Deleted full-access bootstrap key [transaction](https://explorer.testnet.near.org/transactions/aWtyzmteNMx9Ss3y5f5gF1kC5CzMfQC2uqWeqDZQd7f)
@@ -19,7 +19,7 @@ All guardian private credentials stay outside tracked files, locally; full-acces
 
 ## Code upgrade (testnet, state kept)
 
-Second deploy, main `9e585567f69163f1e9bbbc4d53e35e9a9901983c`, [`Cb6saE7z...`](https://explorer.testnet.near.org/transactions/Cb6saE7zu8kRQUYTqqhjgmNpzooTTLJsov7FEvy4HCwH). Read-only tx status: signer and receiver `guardian.bound-aoyamari.testnet`, one `DeployContract` action, `SuccessValue` (`without-init-call`). This note does not name a compiler for that wasm. These observations were first written on the prior repository in [pull request #2](https://github.com/aoyamari/Bound/pull/2) and are carried forward here. This follow-up sends no new transaction.
+Second deploy of contract source `9e585567f69163f1e9bbbc4d53e35e9a9901983c` (ancestor of current `main`), [`Cb6saE7z...`](https://explorer.testnet.near.org/transactions/Cb6saE7zu8kRQUYTqqhjgmNpzooTTLJsov7FEvy4HCwH). Read-only tx status: signer and receiver `guardian.bound-aoyamari.testnet`, one `DeployContract` action, `SuccessValue` (`without-init-call`). This note does not name a compiler for that wasm. These observations were first written on the prior repository in [pull request #2](https://github.com/aoyamari/Bound/pull/2) and are carried forward here. This follow-up sends no new transaction.
 
 Read-only `view_code` (2026-11-06): base58 `FagUutviDcjAKZY6Crv8Aj7H3T41jkqBFhuH1kCGWf3m`, SHA256 `d8a46cdd310339fb0c9654eacdc7879894e0663038a64039e684b1d72d733110`, 255,688 bytes. `contract_source_metadata` is still `{"version":"0.1.0","link":"https://github.com/aoyamari/Bound",...,"build_info":null}`. That `link` is the prior repository string inside the deployed bytes. It is not the current public source URL. The bytes do not carry a git commit. `.github/workflows/contract-provenance.yml` can set `NEP330_BUILD_INFO_*` on a later build; it was not used for this deploy, and this follow-up does not change the contract.
 
@@ -57,7 +57,7 @@ Direct native transfer of 1 yoctoNEAR using the same agent key was attempted bef
 
 ## Static dashboard hosting
 
-The client-only dashboard is `frontend/`. A maintainer publishes `dist` to the `gh-pages` branch of https://github.com/xzLawliet/Bound. The expected project Pages URL is https://xzlawliet.github.io/Bound/ (base path `/Bound/`). Enabling Pages is a separate step from this note. RPC is public read access; no keys enter the browser.
+The client-only dashboard is live at https://xzlawliet.github.io/Bound/. GitHub Pages serves the `gh-pages` branch of https://github.com/xzLawliet/Bound from `/`, and the site base path is `/Bound/`. The page title is `Bound — Autonomy, within bounds.` The published build serves `/Bound/assets/index-Z9pJAv1H.js` and `/Bound/assets/index-BlP7_agH.css`. RPC is public read access; no keys enter the browser.
 
 ## State reads
 

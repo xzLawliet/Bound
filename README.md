@@ -5,7 +5,7 @@
 **Give agents a budget, not a blank check — enforced on-chain, verifiable by anyone.**
 
 **Repository:** https://github.com/xzLawliet/Bound
-**Public dashboard:** https://xzlawliet.github.io/Bound/ (GitHub Pages path `/Bound/`, after a maintainer enables Pages on the `gh-pages` branch)
+**Live dashboard:** https://xzlawliet.github.io/Bound/
 
 AI agents on NEAR need to spend money. Giving them a full-access key is reckless; opaque off-chain policy is hard to audit. **Bound** keeps the treasury in a contract and lets agents call only `spend`, with **public** limits and whitelist enforced atomically every time.
 
@@ -114,7 +114,7 @@ The agent's only key is allowed to call `spend`; the bootstrap full-access key w
 | 0.3 NEAR exceeds cap | `SpendRejected: over_max_per_tx` | [Open](https://explorer.testnet.near.org/transactions/B8p9RA7zqgARfrJ6g1k1mrPP1Mx63urtPfJ3po6V1Z4x) |
 | Unwhitelisted receiver | `SpendRejected: not_whitelisted` | [Open](https://explorer.testnet.near.org/transactions/CbaJYocRDNseff9iAtpchbtD8o6pcy6WvHQxssL3Mbn9) |
 
-Those receipts, and the later allowed payment that filled the UTC day to 0.5 NEAR, are the first bytecode. The account was then upgraded in place (`without-init-call`) from main `9e585567f69163f1e9bbbc4d53e35e9a9901983c`; current code hash and the preserved policy are in [`DEV.md`](DEV.md). No new positive payment has been made on the upgraded wasm: the 2026-11-06 daily cap is already 0.5 / 0.5. The negative direct-transfer test is rejected as `RequiresFullAccess` (SDK v7: `AccessKeyRequiresFullAccessActionError`).
+Those receipts, and the later allowed payment that filled the UTC day to 0.5 NEAR, are the first bytecode. The account was then upgraded in place (`without-init-call`) from contract source `9e585567f69163f1e9bbbc4d53e35e9a9901983c`, an ancestor of current `main`. Current code hash and the preserved policy are in [`DEV.md`](DEV.md). No new positive payment has been made on the upgraded wasm: the 2026-11-06 daily cap is already 0.5 / 0.5. The negative direct-transfer test is rejected as `RequiresFullAccess` (SDK v7: `AccessKeyRequiresFullAccessActionError`).
 
 ### Live policy read
 
@@ -123,7 +123,7 @@ near contract call-function as-read-only guardian.bound-aoyamari.testnet get_pol
 near account list-keys agent.bound-aoyamari.testnet network-config testnet now
 ```
 
-Install with `npm install -g near-cli-rs@latest`; contract needs Rust 1.88+. Run `cargo test --manifest-path contracts/agent-guardian/Cargo.toml` and follow `DEV.md` for live parameters. `docs/DEPLOY.md` separates the first wasm (path-sensitive rebuild of `469b74b`–`31ab724`) from the current upgrade hash. Dashboard source lives in `frontend/` and publishes to the static `gh-pages` branch of https://github.com/xzLawliet/Bound. The expected project Pages URL is https://xzlawliet.github.io/Bound/. Enabling Pages is a separate maintainer step. The read-only dashboard fetches `get_policy` and `can_spend`; scenario cards are dry-run views, **not payments**. Owner controls are implemented through NEAR CLI only; no browser wallet or production deploy yet.
+Install with `npm install -g near-cli-rs@latest`; contract needs Rust 1.88+. Run `cargo test --manifest-path contracts/agent-guardian/Cargo.toml` and follow `DEV.md` for live parameters. `docs/DEPLOY.md` separates the first wasm (path-sensitive rebuild of `469b74b`–`31ab724`) from the current upgrade hash. Dashboard source lives in `frontend/` and is published from the `gh-pages` branch of https://github.com/xzLawliet/Bound. The live dashboard is https://xzlawliet.github.io/Bound/. The read-only dashboard fetches `get_policy` and `can_spend`; scenario cards are dry-run views, **not payments**. Owner controls are implemented through NEAR CLI only; no browser wallet or production deploy yet.
 
 ## Do X → see Y (AI screener / judges)
 

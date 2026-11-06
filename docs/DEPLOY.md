@@ -124,11 +124,11 @@ produced a 255,267-byte wasm whose SHA256 is `0164a8f67c6087542cff3dfbb7404e95c0
 
 This identifies the first deployed source as that identical contract tree, not one commit inside it. The compiler note above is only for that reproduction. It does not assign a compiler to any other local wasm, and it does not mean a later source change or a build with `NEP330_BUILD_INFO_*` set will match.
 
-`scripts/contract-provenance.py` prints SHA256, base58, and the embedded NEP-330 JSON for a wasm. Its encoder self-test still uses the first digest above; that pair is not the current code hash. `.github/workflows/contract-provenance.yml` is an optional later build: it sets `NEP330_BUILD_INFO_SOURCE_CODE_SNAPSHOT` to `HEAD` and remaps paths to `/cargo-home` and `/workspace`. It does not deploy or publish Pages. This upgrade did not use those variables (`build_info` is null) and this follow-up does not change the contract.
+`scripts/contract-provenance.py` prints SHA256, base58, and the embedded NEP-330 JSON for a wasm. Its encoder self-test still uses the first digest above; that pair is not the current code hash. `.github/workflows/contract-provenance.yml` is an optional later build: it sets `NEP330_BUILD_INFO_SOURCE_CODE_SNAPSHOT` to `HEAD` and remaps paths to `/cargo-home` and `/workspace`, then uploads a wasm artifact. This upgrade did not use those variables (`build_info` is null) and this follow-up does not change the contract.
 
 ### Second wasm (current)
 
-Upgrade deploy [`Cb6saE7z...`](https://explorer.testnet.near.org/transactions/Cb6saE7zu8kRQUYTqqhjgmNpzooTTLJsov7FEvy4HCwH) of source `9e585567f69163f1e9bbbc4d53e35e9a9901983c`, which is current `main` of https://github.com/xzLawliet/Bound. One `DeployContract` action and no init call. Read-only `view_code` matches base58 `FagUutviDcjAKZY6Crv8Aj7H3T41jkqBFhuH1kCGWf3m`, SHA256 `d8a46cdd310339fb0c9654eacdc7879894e0663038a64039e684b1d72d733110`, 255,688 bytes. No compiler version is claimed here for that file. The same observations were first recorded on the prior repository in [pull request #2](https://github.com/aoyamari/Bound/pull/2).
+Upgrade deploy [`Cb6saE7z...`](https://explorer.testnet.near.org/transactions/Cb6saE7zu8kRQUYTqqhjgmNpzooTTLJsov7FEvy4HCwH) of contract source `9e585567f69163f1e9bbbc4d53e35e9a9901983c`. That commit is the contract-source ancestor of https://github.com/xzLawliet/Bound `main`. Documentation commits after it leave the contract at that source. One `DeployContract` action and no init call. Read-only `view_code` matches base58 `FagUutviDcjAKZY6Crv8Aj7H3T41jkqBFhuH1kCGWf3m`, SHA256 `d8a46cdd310339fb0c9654eacdc7879894e0663038a64039e684b1d72d733110`, 255,688 bytes. No compiler version is claimed here for that file. The same observations were first recorded on the prior repository in [pull request #2](https://github.com/aoyamari/Bound/pull/2).
 
 State survived the upgrade. Read-only `get_policy`: owner `bound-aoyamari.testnet`, max 0.25 NEAR, daily 0.5 NEAR, not paused, whitelist only `vendor.bound-aoyamari.testnet`. On UTC day bucket `20763` (2026-11-06), `get_spent_today` is 0.5 NEAR, so this wasm has taken no new positive payment. `can_spend`: vendor 0.3 NEAR `over_max_per_tx`; `near-examples.testnet` 0.1 NEAR `not_whitelisted`; vendor 0.1 NEAR `over_daily_limit`. Receipt-level over-max and non-whitelist spends on this wasm are still pending because the demo script refuses when the day is full.
 
@@ -152,7 +152,7 @@ React/Vite/TypeScript, public `get_policy`, `get_spent_today` and `can_spend` vi
 
 ## Dashboard publishing
 
-Pages for https://github.com/xzLawliet/Bound uses the static `gh-pages` branch. The expected project URL is https://xzlawliet.github.io/Bound/. `.github/workflows/contract-provenance.yml` only builds and uploads a wasm artifact; it does not publish the dashboard and it does not enable Pages. Maintain source on `main` and release compiled frontend assets with this user-entered command:
+GitHub Pages for https://github.com/xzLawliet/Bound serves https://xzlawliet.github.io/Bound/ from the `gh-pages` branch at `/`. `.github/workflows/contract-provenance.yml` builds and uploads a wasm artifact. Source stays on `main`. A new dashboard release uses this command:
 
 ```bash
 cd frontend
@@ -160,4 +160,4 @@ npm ci
 npm run publish
 ```
 
-`publish` runs tests, builds, then uses a dev-only `gh-pages` package to deploy `dist` to the `gh-pages` branch of https://github.com/xzLawliet/Bound. A maintainer must configure this repository's Pages to `Deploy from a branch` / `gh-pages` / `/`. The site path is https://xzlawliet.github.io/Bound/. `frontend/vite.config.ts` has the `/Bound/` base. Browser RPC is public GET-style contract view through JSON-RPC. Direct contract mutation is CLI-only in MVP; the web app has no wallet or credentials. This documentation update does not run `publish` and does not enable Pages.
+`publish` runs tests, builds, then uses a dev-only `gh-pages` package to deploy `dist` to the `gh-pages` branch of https://github.com/xzLawliet/Bound. Pages deploys that branch from `/`. The live site is https://xzlawliet.github.io/Bound/. `frontend/vite.config.ts` has the `/Bound/` base. The published build serves `/Bound/assets/index-Z9pJAv1H.js` and `/Bound/assets/index-BlP7_agH.css`. Browser RPC is public GET-style contract view through JSON-RPC. Direct contract mutation is CLI-only in MVP; the web app has no wallet or credentials.
