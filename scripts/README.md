@@ -2,6 +2,8 @@
 
 `demo-agent.mjs` makes three real NEAR testnet transactions using an agent with a Function Call access key, then attempts one forbidden native NEAR transfer.
 
+Public source is https://github.com/xzLawliet/Bound. The read-only dashboard is built from `frontend/` for https://xzlawliet.github.io/Bound/ (Pages path `/Bound/`). This script does not publish that site and does not enable Pages. On 2026-11-06 UTC the guardian daily cap is already 0.5 / 0.5, so a full `npm run demo` stops before a new positive payment. Use `--negative-only` or wait for the next UTC day. See `DEV.md` for the current code hash.
+
 ## Run (repeat with a funded agent, within the daily allowance)
 
 ```bash
