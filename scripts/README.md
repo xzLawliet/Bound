@@ -4,7 +4,7 @@
 
 Public source is https://github.com/xzLawliet/Bound. `scripts/.env.example` targets guardian `guardian.xzlawliet.testnet`, agent `agent2.xzlawliet.testnet`, and vendor `vendor.xzlawliet.testnet`. Owner is `xzlawliet.testnet`. `SCAM_ACCOUNT_ID` stays `near-examples.testnet`. Amounts: 0.1 NEAR allowed, 0.3 NEAR over the 0.25 max.
 
-The 2026-11-06 run on this guardian ended with `spent_today` exactly 0.1 NEAR. Receipts are in the README live proof. `agent.xzlawliet.testnet` is unused (gas allowance 0, no successful payments). The private key stays in ignored `.env.local`. https://xzlawliet.github.io/Bound/ still calls legacy guardian `guardian.bound-aoyamari.testnet` until a later publish from `main`.
+The 2026-11-06 run on this guardian ended with `spent_today` exactly 0.1 NEAR. Receipts are in the README live proof. `agent.xzlawliet.testnet` is unused (gas allowance 0, no successful payments). The private key stays in ignored `.env.local`. https://xzlawliet.github.io/Bound/ calls `guardian.xzlawliet.testnet` via `/Bound/assets/index-Bsw1NO-N.js`.
 
 A 0.5 / 0.5 day in `DEV.md` is a legacy old guardian receipt for `guardian.bound-aoyamari.testnet`, not this balance. `npm run demo` still refuses when the active daily headroom is gone.
 

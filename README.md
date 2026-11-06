@@ -125,9 +125,9 @@ The 0.25 NEAR on the function-call key is the near-api-js default gas budget, se
 
 `agent.xzlawliet.testnet` is an unused first account. Its key had gas allowance 0 and it made no successful payments. The active agent is `agent2.xzlawliet.testnet`.
 
-The deployed wasm is the `9e58556` build. `Cargo.toml` `repository` in this tree is `https://github.com/xzLawliet/Bound`, and that edit was not compiled into the wasm. Legacy old guardian receipts, including that account's 0.5 NEAR day, are in [`DEV.md`](DEV.md). They are not this guardian's balance.
+Contract source commit `9e58556` produced artifact SHA256 `d8a46cdd310339fb0c9654eacdc7879894e0663038a64039e684b1d72d733110`, deployed on `guardian.xzlawliet.testnet`. `Cargo.toml` `repository` in this tree is `https://github.com/xzLawliet/Bound`. That later edit was not compiled into the artifact. The wasm still stores `contract_source_metadata.link` `https://github.com/aoyamari/Bound` and `build_info` null. That link is the repository string baked into the bytes from commit `9e58556`. The active account is `guardian.xzlawliet.testnet`. Legacy old guardian receipts, including that account's 0.5 NEAR day, are in [`DEV.md`](DEV.md). They are a separate balance.
 
-`frontend/src/near.ts` calls `guardian.xzlawliet.testnet`, and the header shows that id in exact case. Scenario rows use `vendor.xzlawliet.testnet` and `near-examples.testnet`. https://xzlawliet.github.io/Bound/ still serves the published bundle, which calls `guardian.bound-aoyamari.testnet`, until a later publish from `main`. This change does not publish Pages.
+`frontend/src/near.ts` calls `guardian.xzlawliet.testnet`, and the header shows that id in exact case. Scenario rows use `vendor.xzlawliet.testnet` and `near-examples.testnet`. https://xzlawliet.github.io/Bound/ serves `/Bound/assets/index-Bsw1NO-N.js` and `/Bound/assets/index-Caz9VB2G.css`. A read-only fetch on 2026-11-06 showed that bundle calls `guardian.xzlawliet.testnet`. This documentation change does not publish Pages.
 
 ```bash
 near contract call-function as-read-only guardian.xzlawliet.testnet get_policy json-args '{}' network-config testnet now
@@ -164,7 +164,7 @@ On every `spend(receiver, amount, memo)`:
 
 Day bucket: `floor(block_timestamp_ns / 86_400_000_000_000)`. `get_spent_today`, `get_day_bucket`, and `can_spend` use the current bucket immediately. Stored `spent_today` resets on the next `spend` or `set_policy`.
 
-`deposit` is a permissionless payable credit. A plain NEAR transfer to the contract account also adds to the treasury. Admin writes and `withdraw` require the predecessor to be the owner. `withdraw` ignores pause and the agent caps. `spend` applies the same policy to every caller; a Function Call key scoped to `spend` is configured on the agent account, not inside this contract.
+`deposit` is a permissionless payable credit. A plain NEAR transfer to the contract account also adds to the treasury. Admin writes and `withdraw` require the predecessor to be the owner. `withdraw` ignores pause and the agent caps. `spend` applies the same policy to every caller. The whitelist names receivers. A Function Call key scoped to `spend` is configured on the agent account, not inside this contract. Owner `xzlawliet.testnet` administers `guardian.xzlawliet.testnet` with that account's full-access key, which can change or delete the code and move NEAR outside `spend` and `withdraw`. The authoritative boundary is in [`docs/DEPLOY.md`](docs/DEPLOY.md).
 
 ---
 

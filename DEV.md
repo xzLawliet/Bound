@@ -10,9 +10,9 @@ The function-call key is `ed25519:AjkYUs1vp7MvfwJmXHs1vaYfYcMT7uEK6EhLU5uksE2c`,
 
 `agent.xzlawliet.testnet` is unused. Its key had gas allowance 0 and it made no successful payments.
 
-Wasm SHA256 `d8a46cdd310339fb0c9654eacdc7879894e0663038a64039e684b1d72d733110` is the `9e58556` build, the same digest as the legacy guardian upgrade. `Cargo.toml` `repository` is now `https://github.com/xzLawliet/Bound`. That metadata change was not built into the deployed wasm.
+Artifact SHA256 `d8a46cdd310339fb0c9654eacdc7879894e0663038a64039e684b1d72d733110` was produced from contract source commit `9e58556` and is deployed on `guardian.xzlawliet.testnet`. The archive guardian upgrade used the same digest. `Cargo.toml` `repository` is now `https://github.com/xzLawliet/Bound`. That later metadata edit was not compiled into the artifact. `contract_source_metadata.link` inside the bytes is `https://github.com/aoyamari/Bound` and `build_info` is null. The link is the repository string stored from commit `9e58556`. The active account is `guardian.xzlawliet.testnet`.
 
-`frontend/src/near.ts` calls `guardian.xzlawliet.testnet`. https://xzlawliet.github.io/Bound/ still serves the published bundle for `guardian.bound-aoyamari.testnet` until a later publish from `main`. This change does not publish Pages.
+`frontend/src/near.ts` calls `guardian.xzlawliet.testnet`. https://xzlawliet.github.io/Bound/ serves `/Bound/assets/index-Bsw1NO-N.js` and `/Bound/assets/index-Caz9VB2G.css`. A read-only fetch on 2026-11-06 showed that bundle calls the same guardian. This documentation change does not publish Pages.
 
 All guardian private credentials stay outside tracked files, locally; full-access owner credentials are outside the repo, while the restricted agent credential is under ignored `scripts/credentials/`. `.gitignore` excludes credentials and local env files. None of those files or raw private keys belongs in the public repo, browser, or demo.
 
@@ -73,7 +73,7 @@ Direct native transfer of 1 yoctoNEAR using the same agent key was attempted bef
 
 ## Static dashboard hosting
 
-The client-only dashboard is live at https://xzlawliet.github.io/Bound/. GitHub Pages serves the `gh-pages` branch of https://github.com/xzLawliet/Bound from `/`, and the site base path is `/Bound/`. The page title is `Bound — Autonomy, within bounds.` The published build serves `/Bound/assets/index-Z9pJAv1H.js` and `/Bound/assets/index-BlP7_agH.css`. That published build still requests legacy guardian `guardian.bound-aoyamari.testnet`. Source requests `guardian.xzlawliet.testnet`. The live URL shows the new guardian only after a later publish from `main`. This change does not publish. RPC is public read access; no keys enter the browser.
+The client-only dashboard is live at https://xzlawliet.github.io/Bound/. GitHub Pages serves the `gh-pages` branch of https://github.com/xzLawliet/Bound from `/`, and the site base path is `/Bound/`. The page title is `Bound — Autonomy, within bounds.` The published build serves `/Bound/assets/index-Bsw1NO-N.js` and `/Bound/assets/index-Caz9VB2G.css`. That bundle requests `guardian.xzlawliet.testnet`. Read-only check on 2026-11-06. This documentation change does not publish. RPC is public read access; no keys enter the browser.
 
 ## State reads
 

@@ -5,9 +5,9 @@ Polished read-only demo UI for **Bound** — *Autonomy, within bounds.*
 Talks to a NEAR testnet guardian via public RPC only. No backend. No wallet. No keys in the browser.
 
 **Contract:** [`guardian.xzlawliet.testnet`](https://explorer.testnet.near.org/accounts/guardian.xzlawliet.testnet). Owner `xzlawliet.testnet`. Agent `agent2.xzlawliet.testnet`. Vendor `vendor.xzlawliet.testnet`.
-**Deploy and init:** [`C4ECGqdcki9YV9ZZUbTdzuFYoyNH48poWXSna4NGTQ9y`](https://explorer.testnet.near.org/transactions/C4ECGqdcki9YV9ZZUbTdzuFYoyNH48poWXSna4NGTQ9y). Wasm SHA256 `d8a46cdd310339fb0c9654eacdc7879894e0663038a64039e684b1d72d733110` from source `9e58556` (that metadata edit in `Cargo.toml` was not rebuilt into the wasm). On 2026-11-06, `spent_today` ended at exactly 0.1 NEAR. Payment receipts are in the root README.
+**Deploy and init:** [`C4ECGqdcki9YV9ZZUbTdzuFYoyNH48poWXSna4NGTQ9y`](https://explorer.testnet.near.org/transactions/C4ECGqdcki9YV9ZZUbTdzuFYoyNH48poWXSna4NGTQ9y). Artifact SHA256 `d8a46cdd310339fb0c9654eacdc7879894e0663038a64039e684b1d72d733110` was built from contract source commit `9e58556`. The later `Cargo.toml` repository edit was not compiled into that wasm. Its embedded `link` is `https://github.com/aoyamari/Bound`. The active account is `guardian.xzlawliet.testnet`. On 2026-11-06, `spent_today` ended at exactly 0.1 NEAR. Payment receipts are in the root README.
 **Header:** `guardian.xzlawliet.testnet` in exact case. Scenario rows show `vendor.xzlawliet.testnet` and `near-examples.testnet`. Owner text comes from `get_policy`.
-**Published site:** https://xzlawliet.github.io/Bound/ still calls legacy guardian `guardian.bound-aoyamari.testnet` until a later publish from `main`. This change does not publish Pages.
+**Published site:** https://xzlawliet.github.io/Bound/ serves `/Bound/assets/index-Bsw1NO-N.js` and `/Bound/assets/index-Caz9VB2G.css`. That bundle calls `guardian.xzlawliet.testnet`. Read-only check on 2026-11-06. This documentation change does not publish Pages.
 **RPC:** `https://rpc.testnet.near.org`
 **Views used:** `get_policy`, `get_spent_today`, `can_spend`
 **Repository:** https://github.com/xzLawliet/Bound
@@ -47,4 +47,4 @@ React 18 + Vite + TypeScript. Raw `fetch` to NEAR JSON-RPC — no `near-api-js`,
 
 ## Publish
 
-`npm run publish` tests, builds, and publishes `dist` to the `gh-pages` branch of https://github.com/xzLawliet/Bound. The live site is https://xzlawliet.github.io/Bound/ and still calls legacy guardian `guardian.bound-aoyamari.testnet`. It shows `guardian.xzlawliet.testnet` only after a later publish from `main`. This change does not run `npm run publish`.
+`npm run publish` tests, builds, and publishes `dist` to the `gh-pages` branch of https://github.com/xzLawliet/Bound. The live site is https://xzlawliet.github.io/Bound/ and serves `/Bound/assets/index-Bsw1NO-N.js`, which calls `guardian.xzlawliet.testnet`. This documentation change does not run `npm run publish`.
