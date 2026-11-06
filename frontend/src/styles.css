@@ -99,6 +99,13 @@ a:hover { color: var(--orange); }
   animation: pulse 1.8s ease infinite;
 }
 
+/* Account ids stay in their exact case. The live badge keeps the uppercase rule. */
+a.badge.mono {
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 500;
+}
+
 @keyframes pulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.55; }

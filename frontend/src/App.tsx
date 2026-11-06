@@ -22,18 +22,20 @@ type Scenario = {
   blurb: string
 }
 
+// Vendor target is vendor.xzlawliet.testnet. Archive vendor: vendor.bound-aoyamari.testnet.
+// Unlisted receiver stays near-examples.testnet.
 const SCENARIOS: Scenario[] = [
   {
     id: 'ok',
     title: 'Allowed payment',
-    receiver: 'vendor.bound-aoyamari.testnet',
+    receiver: 'vendor.xzlawliet.testnet',
     amountNear: '0.1',
     blurb: 'whitelisted · under max',
   },
   {
     id: 'over',
     title: 'Over max / tx',
-    receiver: 'vendor.bound-aoyamari.testnet',
+    receiver: 'vendor.xzlawliet.testnet',
     amountNear: '0.3',
     blurb: '0.3 Ⓝ compared with live max_per_tx',
   },

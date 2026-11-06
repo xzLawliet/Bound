@@ -1,5 +1,6 @@
 # Records a wasm build for one git commit. Does not deploy, publish Pages,
-# or compare the artifact to guardian.bound-aoyamari.testnet.
+# or compare the artifact to the active target guardian.xzlawliet.testnet
+# (previously guardian.bound-aoyamari.testnet).
 name: Contract build provenance
 
 on:

@@ -6,6 +6,7 @@
 **Site:** https://nearhackathon.com/
 **Live dashboard:** https://xzlawliet.github.io/Bound/
 **Repository:** https://github.com/xzLawliet/Bound
+**Active testnet:** owner `xzlawliet.testnet`, guardian `guardian.xzlawliet.testnet`, agent `agent2.xzlawliet.testnet`, vendor `vendor.xzlawliet.testnet`. Limits 0.25 NEAR max / 0.5 NEAR daily. Unknown receiver `near-examples.testnet`. 2026-11-06 run ended unpaused with `spent_today` exactly 0.1 NEAR. Receipts: README live proof. Legacy old guardian receipts stay in `DEV.md` and are not this balance. https://xzlawliet.github.io/Bound/ still calls `guardian.bound-aoyamari.testnet` until a later publish from `main`.
 
 ## Positioning one-liner
 
@@ -30,7 +31,7 @@ Transparent on-chain spending policy for AI agents — complementary to OutLayer
 - [x] Public GitHub repo
 - [x] README with OutLayer table + Do X → see Y
 - [x] `cargo test` green
-- [x] Testnet deploy + example tx links
+- [x] Testnet deploy + example tx links (active `guardian.xzlawliet.testnet` / `agent2.xzlawliet.testnet`, including allow, over-max, non-whitelist, and pause; legacy receipts in `DEV.md`)
 - [ ] Demo video 60–90s
 - [ ] Post on X tagging `@NEARProtocol` + `#NEARHackathon`
 - [ ] Form: NEAR wallet for prizes, repo URL, post link
