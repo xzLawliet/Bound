@@ -8,7 +8,7 @@ Talks to the live NEAR testnet guardian via public RPC only. No backend. No wall
 **RPC:** `https://rpc.testnet.near.org`
 **Views used:** `get_policy`, `get_spent_today`, `can_spend`
 **Repository:** https://github.com/xzLawliet/Bound
-**Expected Pages URL:** https://xzlawliet.github.io/Bound/ (base `/Bound/`, after a maintainer enables Pages)
+**Live dashboard:** https://xzlawliet.github.io/Bound/
 
 ## Run
 
@@ -44,4 +44,4 @@ React 18 + Vite + TypeScript. Raw `fetch` to NEAR JSON-RPC — no `near-api-js`,
 
 ## Publish
 
-`npm run publish` tests/builds and publishes `dist` to the `gh-pages` branch of https://github.com/xzLawliet/Bound. The expected site is https://xzlawliet.github.io/Bound/. Enabling Pages is a separate maintainer step. Do not publish during on-chain owner-admin operations; owner controls are only through documented NEAR CLI in this MVP.
+`npm run publish` tests, builds, and publishes `dist` to the `gh-pages` branch of https://github.com/xzLawliet/Bound. The live site is https://xzlawliet.github.io/Bound/. Do not publish during on-chain owner-admin operations; owner controls are only through documented NEAR CLI in this MVP.
